@@ -21,14 +21,17 @@ import {
   AlertCircle,
   CheckCircle,
   Star,
+  Shield,
 } from "lucide-react";
 
 export const FocusStudio: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const isBlocked = searchParams.get("blocked") === "true";
+  const blockedSite = searchParams.get("site") || "";
   const initialTaskId = searchParams.get("taskId") || "";
-  const initialTitle = searchParams.get("taskTitle") || "Core Deep Work Block";
+  const initialTitle = searchParams.get("taskTitle") || (isBlocked ? "Reclaimed Deep Work Focus Block" : "Core Deep Work Block");
   const initialDuration = Number(searchParams.get("duration") || 45);
 
   const [taskTitle, setTaskTitle] = useState(initialTitle);
@@ -171,6 +174,23 @@ export const FocusStudio: React.FC = () => {
       }`}
     >
       <div className="w-full max-w-xl space-y-6">
+        {/* Distraction Intercepted Banner */}
+        {isBlocked && (
+          <div className="p-3.5 rounded-xl bg-orange-50 border border-orange-200 text-orange-950 flex items-center justify-between shadow-xs animate-in fade-in">
+            <div className="flex items-center gap-2.5">
+              <span className="px-2 py-0.5 rounded bg-orange-600 text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                SHIELD ACTIVE
+              </span>
+              <span className="text-xs font-bold">
+                {blockedSite ? `${blockedSite} blocked.` : "Compulsive site blocked."} Attention reclaimed for Deep Work.
+              </span>
+            </div>
+            <span className="text-[10px] font-mono font-bold text-orange-700 hidden sm:inline">
+              Desktop Shield
+            </span>
+          </div>
+        )}
+
         {/* Top Control Bar */}
         <div className="flex items-center justify-between">
           <Badge variant="brand" size="md">
