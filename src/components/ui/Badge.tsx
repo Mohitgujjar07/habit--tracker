@@ -15,26 +15,26 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    default: "bg-surface-200/80 dark:bg-surface-800 text-surface-700 dark:text-surface-300 border-surface-300/40 dark:border-surface-700/50",
-    critical: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
-    high: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-    medium: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
-    low: "bg-surface-200/60 dark:bg-surface-800/80 text-surface-600 dark:text-surface-400 border-surface-300/30",
-    success: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-    warning: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-    brand: "bg-brand-500/10 text-brand-600 dark:text-brand-400 border-brand-500/20",
+    default: "bg-slate-100 text-slate-700 border-slate-200",
+    critical: "bg-rose-50 text-rose-700 border-rose-200",
+    high: "bg-amber-50 text-amber-700 border-amber-200",
+    medium: "bg-sky-50 text-sky-700 border-sky-200",
+    low: "bg-slate-100 text-slate-600 border-slate-200",
+    success: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    warning: "bg-amber-50 text-amber-700 border-amber-200",
+    brand: "bg-orange-50 text-orange-700 border-orange-200",
   };
 
   const sizeStyles = {
-    sm: "text-[11px] px-2 py-0.5 font-medium tracking-wide",
-    md: "text-xs px-2.5 py-1 font-medium",
+    sm: "text-[11px] px-2.5 py-0.5 font-medium tracking-wide",
+    md: "text-xs px-3 py-1 font-semibold",
   };
 
   return (
     <span
       className={twMerge(
         clsx(
-          "inline-flex items-center gap-1 rounded-md border font-sans select-none",
+          "inline-flex items-center gap-1.5 rounded-full border font-sans select-none",
           variantStyles[variant],
           sizeStyles[size],
           className

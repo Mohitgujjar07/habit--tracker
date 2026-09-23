@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import {
   LifeBuoy,
   ShieldAlert,
-  Moon,
-  Sun,
   Plus,
   Bot,
   Command,
@@ -30,40 +30,32 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCommandCenter,
   isBadDayModeActive = false,
 }) => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-
-  useEffect(() => {
-    // Check initial theme class on root html
-    if (typeof window !== "undefined") {
-      const root = document.documentElement;
-      setIsDarkMode(root.classList.contains("dark"));
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const root = document.documentElement;
-    if (root.classList.contains("dark")) {
-      root.classList.remove("dark");
-      setIsDarkMode(false);
-      localStorage.setItem("ptos_theme", "light");
-    } else {
-      root.classList.add("dark");
-      setIsDarkMode(true);
-      localStorage.setItem("ptos_theme", "dark");
-    }
-  };
-
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between px-4 sm:px-8 py-3.5 border-b border-surface-200/80 dark:border-surface-800 bg-white/70 dark:bg-surface-50/70 backdrop-blur-md">
-      {/* Left items / status indicator */}
+    <header className="sticky top-0 z-20 flex items-center justify-between px-4 sm:px-8 py-3.5 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+      {/* Left items: Mobile Logo & Desktop Quick Find */}
       <div className="flex items-center gap-3">
+        {/* Mobile Logo Branding */}
+        <Link href="/dashboard" className="md:hidden flex items-center gap-2">
+          <div className="w-8 h-8 rounded-xl overflow-hidden shadow-xs border border-orange-200">
+            <img
+              src="/logo.png"
+              alt="comeback.mjg logo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <span className="font-bold text-sm tracking-tight text-slate-900">
+            comeback<span className="text-orange-500">.mjg</span>
+          </span>
+        </Link>
+
+        {/* Desktop Quick Find Search */}
         <button
           onClick={onOpenCommandCenter}
-          className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-surface-200 dark:border-surface-700/60 bg-surface-100/70 dark:bg-surface-800/40 text-xs text-surface-500 hover:text-foreground hover:border-surface-300 transition-colors"
+          className="hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 text-xs text-slate-500 hover:text-slate-800 transition-all shadow-xs"
         >
-          <Command size={13} />
+          <Command size={13} className="text-slate-400" />
           <span>Quick Find...</span>
-          <kbd className="font-mono text-[10px] bg-surface-200 dark:bg-surface-700 px-1 py-0.5 rounded text-surface-600 dark:text-surface-300">
+          <kbd className="font-mono text-[10px] bg-slate-200/80 px-1.5 py-0.5 rounded text-slate-600">
             ⌘K
           </kbd>
         </button>
@@ -75,29 +67,29 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Right actions: Stuck, Bad Day, AI Coach, Add, Theme */}
+      {/* Right actions: Stuck, Bad Day, AI Coach, Add (NO THEME TOGGLE) */}
       <div className="flex items-center gap-2 sm:gap-2.5">
         {/* I'M STUCK (Section 30) */}
         <button
           onClick={onOpenStuckModal}
-          className="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 transition-all flex items-center gap-1.5 active:scale-95"
+          className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-xs"
           title="Micro 2-minute action generator when experiencing friction or avoidance"
         >
-          <LifeBuoy size={14} />
+          <LifeBuoy size={14} className="text-rose-500" />
           <span>I'm Stuck</span>
         </button>
 
         {/* BAD DAY MODE (Section 39) */}
         <button
           onClick={onOpenBadDayMode}
-          className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+          className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all shadow-xs ${
             isBadDayModeActive
-              ? "bg-amber-500/20 border-amber-500 text-amber-600 dark:text-amber-400"
-              : "border-surface-200 dark:border-surface-700/60 text-surface-600 dark:text-surface-400 hover:text-foreground hover:bg-surface-100 dark:hover:bg-surface-800"
+              ? "bg-amber-100 border-amber-400 text-amber-800"
+              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900"
           }`}
           title="Scale down the entire day to essential survival & recovery minimums"
         >
-          <ShieldAlert size={14} />
+          <ShieldAlert size={14} className="text-amber-500" />
           <span>{isBadDayModeActive ? "Exit Bad Day" : "Bad Day Mode"}</span>
         </button>
 
@@ -106,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
           variant="subtle"
           size="sm"
           onClick={onOpenAICoach}
-          className="gap-1.5 text-xs text-brand-600 dark:text-brand-400"
+          className="gap-1.5 text-xs text-orange-600 bg-orange-50 hover:bg-orange-100 border border-orange-200/60"
         >
           <Bot size={15} />
           <span className="hidden sm:inline">Coach</span>
@@ -122,15 +114,6 @@ export const Header: React.FC<HeaderProps> = ({
           <Plus size={15} />
           <span>Action</span>
         </Button>
-
-        {/* THEME TOGGLE */}
-        <button
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-surface-500 hover:text-foreground hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
-        >
-          {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
       </div>
     </header>
   );

@@ -47,15 +47,15 @@ export const MindView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 sm:p-6 animate-in fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-surface-200/80 dark:border-surface-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-surface-200">
         <div>
-          <span className="text-[10px] font-mono uppercase tracking-wider text-purple-600 dark:text-purple-400 font-semibold">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-purple-600 font-bold">
             COGNITIVE & EMOTIONAL RESILIENCE
           </span>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Mind, Reflection & Identity
           </h1>
-          <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+          <p className="text-xs text-surface-500 mt-1">
             Turn emotional resistance into behavioral data. Build proof of your capability.
           </p>
         </div>
@@ -65,15 +65,15 @@ export const MindView: React.FC = () => {
             variant="secondary"
             size="sm"
             onClick={() => openLog("mood")}
-            className="text-xs gap-1.5"
+            className="text-xs gap-1.5 shadow-sm"
           >
-            <Smile size={14} /> Log State
+            <Smile size={14} className="text-amber-500" /> Log State
           </Button>
           <Button
             variant="primary"
             size="sm"
             onClick={() => openLog("frustration")}
-            className="text-xs gap-1.5"
+            className="text-xs gap-1.5 shadow-sm"
           >
             <Flame size={14} /> Frustration Journal
           </Button>
@@ -81,10 +81,10 @@ export const MindView: React.FC = () => {
       </div>
 
       {/* Identity Evidence Bank (Section 51) */}
-      <Card className="p-5 space-y-3 bg-gradient-to-r from-brand-500/[0.04] to-purple-500/[0.04] border-brand-500/20">
+      <Card className="p-5 space-y-3 bg-gradient-to-r from-brand-500/[0.06] to-purple-500/[0.06] border-brand-500/20 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 font-bold block">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-brand-600 font-bold block">
               IDENTITY / EVIDENCE ENGINE
             </span>
             <h3 className="text-sm font-bold text-foreground">
@@ -100,7 +100,7 @@ export const MindView: React.FC = () => {
           {evidenceList.map((ev) => (
             <div
               key={ev.id}
-              className="p-3 rounded-lg border border-surface-200/80 dark:border-surface-700/60 bg-white/70 dark:bg-surface-800/50 text-xs space-y-1"
+              className="p-3 rounded-lg border border-surface-200 bg-white/90 text-xs space-y-1 shadow-2xs"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle size={14} className="text-emerald-500 shrink-0" />
@@ -108,7 +108,7 @@ export const MindView: React.FC = () => {
                   Evidence for: "{ev.identityStatement}"
                 </span>
               </div>
-              <p className="text-surface-500 dark:text-surface-400 pl-5">
+              <p className="text-surface-600 pl-5">
                 {ev.evidenceAction}
               </p>
             </div>
@@ -119,7 +119,7 @@ export const MindView: React.FC = () => {
       {/* Two columns: Frustration Journal & Lessons Learned Library */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Frustration Journal (Section 38) */}
-        <Card className="p-5 space-y-4">
+        <Card className="p-5 space-y-4 bg-white border-surface-200/80 shadow-sm">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <Flame size={16} className="text-rose-500" />
@@ -137,7 +137,7 @@ export const MindView: React.FC = () => {
               frustrations.map((f) => (
                 <div
                   key={f.id}
-                  className="p-3 rounded-lg border border-surface-200/80 dark:border-surface-700/60 bg-surface-50/50 dark:bg-surface-800/40 text-xs space-y-1.5"
+                  className="p-3 rounded-lg border border-surface-200 bg-surface-50/70 text-xs space-y-1.5"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-foreground">
@@ -147,9 +147,9 @@ export const MindView: React.FC = () => {
                       {f.didQuit ? "Interrupted" : "Persisted"}
                     </Badge>
                   </div>
-                  <p className="text-surface-600 dark:text-surface-300">{f.whatHappened}</p>
+                  <p className="text-surface-700">{f.whatHappened}</p>
                   {f.actionTaken && (
-                    <div className="text-[11px] text-surface-400">
+                    <div className="text-[11px] text-surface-500">
                       <strong>Action:</strong> {f.actionTaken}
                     </div>
                   )}
@@ -160,7 +160,7 @@ export const MindView: React.FC = () => {
         </Card>
 
         {/* Lessons Learned Library (Section 48) */}
-        <Card className="p-5 space-y-4">
+        <Card className="p-5 space-y-4 bg-white border-surface-200/80 shadow-sm">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <BookOpen size={16} className="text-amber-500" />
@@ -173,14 +173,14 @@ export const MindView: React.FC = () => {
             {lessons.map((les) => (
               <div
                 key={les.id}
-                className="p-3.5 rounded-lg border border-surface-200/80 dark:border-surface-700/60 bg-surface-50/50 dark:bg-surface-800/40 text-xs space-y-2"
+                className="p-3.5 rounded-lg border border-surface-200 bg-surface-50/70 text-xs space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-foreground">{les.title}</span>
                   <Badge variant="warning" size="sm">{les.category}</Badge>
                 </div>
-                <p className="text-surface-500 dark:text-surface-400">{les.context}</p>
-                <div className="p-2 rounded bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 font-medium">
+                <p className="text-surface-600">{les.context}</p>
+                <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 font-medium">
                   <strong>Rule to remember: </strong>
                   {les.actionRule}
                 </div>

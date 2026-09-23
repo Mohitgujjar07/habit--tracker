@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { NextActionRecommendation } from "@/types";
-import { Zap, Clock, ArrowRight, CornerDownRight, RotateCw, CheckCircle2 } from "lucide-react";
+import { Zap, Clock, ArrowRight, CornerDownRight, RotateCw } from "lucide-react";
 
 interface NextActionHeroProps {
   action: NextActionRecommendation;
@@ -45,12 +45,12 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
   };
 
   return (
-    <Card className="relative overflow-hidden border-brand-500/30 bg-gradient-to-br from-brand-500/[0.04] via-transparent to-surface-100/50 dark:to-surface-800/20 p-5 sm:p-6 shadow-sm">
+    <Card className="relative overflow-hidden border-orange-200/90 bg-gradient-to-br from-orange-50/70 via-white to-amber-50/40 p-5 sm:p-7 shadow-card hover:border-orange-300">
       {/* Top tag */}
       <div className="flex items-center justify-between gap-2 pb-3">
         <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-brand-500 animate-ping" />
-          <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-brand-600 dark:text-brand-400">
+          <span className="flex h-2.5 w-2.5 rounded-full bg-orange-500 animate-ping" />
+          <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-orange-600">
             NEXT ACTION • RECOMMENDED BY ENGINE
           </span>
         </div>
@@ -58,7 +58,7 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
           <Badge variant="brand" size="sm">
             <Clock size={11} /> {action.durationMinutes} min block
           </Badge>
-          <span className="text-[11px] text-surface-400 font-mono hidden sm:inline">
+          <span className="text-[11px] text-slate-500 font-mono font-medium hidden sm:inline">
             {action.energyMatch}
           </span>
         </div>
@@ -66,27 +66,27 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
 
       {/* Main Action Title */}
       <div className="my-2">
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+        <h2 className="text-lg sm:text-2xl font-extrabold tracking-tight text-slate-900 leading-snug">
           {action.title}
         </h2>
         {action.projectTitle && (
-          <div className="flex items-center gap-1.5 text-xs text-surface-500 dark:text-surface-400 mt-1">
-            <CornerDownRight size={13} className="text-brand-500" />
+          <div className="flex items-center gap-1.5 text-xs text-slate-600 mt-1 font-medium">
+            <CornerDownRight size={13} className="text-orange-500" />
             <span>Connected to Project:</span>
-            <span className="font-semibold text-foreground">{action.projectTitle}</span>
+            <span className="font-bold text-slate-900">{action.projectTitle}</span>
           </div>
         )}
       </div>
 
       {/* Rationale explanation */}
-      <p className="text-xs text-surface-500 dark:text-surface-400 bg-surface-100/80 dark:bg-surface-800/60 p-2.5 rounded-lg border border-surface-200/50 dark:border-surface-700/40 my-3">
-        <span className="font-semibold text-foreground">Why this now:</span> {action.rationale}
-      </p>
+      <div className="text-xs text-slate-600 bg-white/90 p-3 rounded-xl border border-slate-200/80 my-3 shadow-xs">
+        <span className="font-bold text-slate-900">Why this now:</span> {action.rationale}
+      </div>
 
       {/* Postpone reason picker overlay */}
       {showReasonPicker ? (
-        <div className="mt-3 p-3 bg-surface-100 dark:bg-surface-800 rounded-xl border border-surface-200 dark:border-surface-700 space-y-2 animate-in fade-in">
-          <div className="text-xs font-semibold text-foreground">
+        <div className="mt-3 p-3.5 bg-white rounded-xl border border-orange-200 space-y-2.5 shadow-sm animate-in fade-in">
+          <div className="text-xs font-bold text-slate-900">
             Why skip this action right now? (Recorded for avoidance analysis)
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -94,7 +94,7 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
               <button
                 key={r}
                 onClick={() => handleSelectReason(r)}
-                className="text-left text-xs p-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 hover:border-brand-500 text-surface-700 dark:text-surface-300 transition-colors"
+                className="text-left text-xs p-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-orange-400 hover:bg-orange-50/50 text-slate-700 font-medium transition-colors"
               >
                 {r}
               </button>
@@ -102,7 +102,7 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
           </div>
           <button
             onClick={() => setShowReasonPicker(false)}
-            className="text-[11px] text-surface-400 hover:text-foreground mt-1"
+            className="text-[11px] text-slate-400 hover:text-slate-700 mt-1 font-medium"
           >
             Cancel
           </button>
@@ -114,7 +114,7 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
             variant="primary"
             size="md"
             onClick={handleStartFocus}
-            className="gap-2 shadow-md shadow-brand-500/10"
+            className="gap-2 shadow-md shadow-orange-500/20 px-5"
           >
             <Zap size={16} />
             <span>START FOCUS ({action.durationMinutes}m)</span>
@@ -122,7 +122,7 @@ export const NextActionHero: React.FC<NextActionHeroProps> = ({
           </Button>
 
           <Button
-            variant="subtle"
+            variant="secondary"
             size="md"
             onClick={() => setShowReasonPicker(true)}
             className="text-xs"

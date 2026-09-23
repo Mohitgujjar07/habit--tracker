@@ -48,30 +48,30 @@ export const Modal: React.FC<ModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in"
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity animate-in fade-in"
         onClick={onClose}
       />
 
       {/* Modal Dialog Card */}
       <div
-        className={`relative w-full ${widthClasses[maxWidth]} bg-white dark:bg-surface-100 border border-surface-200 dark:border-surface-700/80 rounded-2xl p-6 shadow-2xl z-10 transition-all animate-in zoom-in-95`}
+        className={`relative w-full ${widthClasses[maxWidth]} bg-white border border-slate-200/90 rounded-2xl p-6 shadow-2xl z-10 transition-all animate-in zoom-in-95`}
       >
         <div className="flex items-start justify-between pb-3">
           <div>
             {title && (
-              <h3 className="text-lg font-semibold tracking-tight text-foreground">
+              <h3 className="text-base sm:text-lg font-bold tracking-tight text-slate-900">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <p className="text-xs text-slate-500 mt-0.5">
                 {description}
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-surface-400 hover:text-surface-600 dark:hover:text-surface-200 transition-colors p-1 rounded-lg hover:bg-surface-200/50 dark:hover:bg-surface-800"
+            className="text-slate-400 hover:text-slate-700 transition-colors p-1.5 rounded-lg hover:bg-slate-100"
           >
             <X size={18} />
           </button>

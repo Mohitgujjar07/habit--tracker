@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
-import { ShieldAlert, Check, ArrowRight } from "lucide-react";
+import { Check } from "lucide-react";
 
 interface BadDayModalProps {
   isOpen: boolean;
@@ -48,9 +48,9 @@ export const BadDayModal: React.FC<BadDayModalProps> = ({
     >
       <div className="space-y-4">
         {/* Banner */}
-        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-300">
-          <p className="font-semibold mb-0.5">Forget the full plan. Let's protect the day.</p>
-          <p className="text-[11px] opacity-90">
+        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-800 shadow-xs">
+          <p className="font-bold mb-0.5">Forget the full plan. Let's protect the day.</p>
+          <p className="text-[11px] opacity-90 leading-relaxed">
             We compress your dashboard to only 5 baseline anchors. Completing these is 100% success for today.
           </p>
         </div>
@@ -63,26 +63,26 @@ export const BadDayModal: React.FC<BadDayModalProps> = ({
               <button
                 key={item.id}
                 onClick={() => toggleCheck(item.id)}
-                className={`w-full text-left p-3 rounded-lg border transition-all flex items-start gap-3 ${
+                className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 shadow-xs ${
                   isDone
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-foreground"
-                    : "bg-surface-50 dark:bg-surface-800/60 border-surface-200 dark:border-surface-700/80 text-foreground hover:bg-surface-100 dark:hover:bg-surface-800"
+                    ? "bg-emerald-50/70 border-emerald-300 text-slate-800"
+                    : "bg-white border-slate-200 text-slate-800 hover:bg-slate-50"
                 }`}
               >
                 <div
-                  className={`mt-0.5 w-4 h-4 rounded flex items-center justify-center border transition-colors ${
+                  className={`mt-0.5 w-4 h-4 rounded-md flex items-center justify-center border transition-colors ${
                     isDone
-                      ? "bg-emerald-500 border-emerald-500 text-white"
-                      : "border-surface-400 dark:border-surface-600"
+                      ? "bg-emerald-600 border-emerald-600 text-white"
+                      : "border-slate-300 bg-white"
                   }`}
                 >
                   {isDone && <Check size={12} strokeWidth={3} />}
                 </div>
                 <div>
-                  <div className={`text-xs font-semibold ${isDone ? "line-through opacity-70" : ""}`}>
+                  <div className={`text-xs font-bold ${isDone ? "line-through opacity-60 text-slate-500" : "text-slate-900"}`}>
                     {item.title}
                   </div>
-                  <div className="text-[11px] text-surface-500 dark:text-surface-400">
+                  <div className="text-[11px] text-slate-500 mt-0.5">
                     {item.desc}
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export const BadDayModal: React.FC<BadDayModalProps> = ({
               onToggleMode(!isActive);
               onClose();
             }}
-            className="text-xs font-medium text-surface-500 hover:text-foreground"
+            className="text-xs font-semibold text-slate-600 hover:text-slate-900"
           >
             {isActive ? "Exit Bad Day Mode" : "Activate on Dashboard"}
           </button>

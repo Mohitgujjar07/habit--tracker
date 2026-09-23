@@ -197,13 +197,24 @@ export const OnboardingWizard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-8">
+      {/* Brand Icon Header */}
+      <div className="flex items-center gap-2.5 mb-6">
+        <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-brand-200">
+          <img src="/logo.png" alt="comeback.mjg" className="w-full h-full object-cover" />
+        </div>
+        <div>
+          <span className="font-bold text-base tracking-tight text-foreground block leading-tight">comeback.mjg</span>
+          <span className="text-[10px] text-brand-600 font-semibold uppercase tracking-wider block">A Better You. Everyday.</span>
+        </div>
+      </div>
+
       {/* Progress header */}
       <div className="w-full max-w-2xl mb-6 flex items-center justify-between">
         <div>
-          <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 uppercase tracking-widest font-semibold">
+          <span className="text-[11px] font-mono text-brand-600 uppercase tracking-widest font-bold">
             Personal OS Setup
           </span>
-          <h2 className="text-xl font-bold tracking-tight">Step {step} of 10</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Step {step} of 10</h2>
         </div>
         <div className="flex gap-1.5">
           {Array.from({ length: 10 }).map((_, i) => (
@@ -214,39 +225,39 @@ export const OnboardingWizard: React.FC = () => {
                   ? "w-8 bg-brand-500"
                   : i + 1 < step
                   ? "w-3 bg-brand-500/40"
-                  : "w-3 bg-surface-200 dark:bg-surface-800"
+                  : "w-3 bg-surface-200"
               }`}
             />
           ))}
         </div>
       </div>
 
-      <Card className="w-full max-w-2xl p-6 sm:p-8 shadow-xl border-surface-200/80 dark:border-surface-700/80">
+      <Card className="w-full max-w-2xl p-6 sm:p-8 shadow-sm border-surface-200/80 bg-white">
         {/* STEP 1: Basic Profile */}
         {step === 1 && (
           <div className="space-y-5 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Welcome. Let's get to know you.</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Welcome. Let's get to know you.</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 The more accurately you answer, the better your OS adapts. You can update this anytime.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">Preferred Name</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Preferred Name</label>
                 <input
                   type="text"
                   value={preferredName}
                   onChange={(e) => setPreferredName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Occupation</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Occupation</label>
                 <select
                   value={occupation}
                   onChange={(e) => setOccupation(e.target.value as any)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none"
                 >
                   <option value="entrepreneur">Entrepreneur</option>
                   <option value="employee">Employee</option>
@@ -258,18 +269,18 @@ export const OnboardingWizard: React.FC = () => {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">
+              <label className="block text-xs font-semibold text-surface-700 mb-1">
                 What are you currently building or doing?
               </label>
               <input
                 type="text"
                 value={occupationDetail}
                 onChange={(e) => setOccupationDetail(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">
+              <label className="block text-xs font-semibold text-surface-700 mb-1">
                 Genuinely free time on a normal weekday?
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -280,8 +291,8 @@ export const OnboardingWizard: React.FC = () => {
                     onClick={() => setFreeTime(slot)}
                     className={`py-2 px-1 text-xs rounded-lg border text-center transition-all ${
                       freeTime === slot
-                        ? "bg-brand-500/10 border-brand-500 text-brand-600 dark:text-brand-400 font-semibold"
-                        : "border-surface-200 dark:border-surface-700 text-surface-500"
+                        ? "bg-brand-500/10 border-brand-500 text-brand-600 font-semibold"
+                        : "border-surface-200 text-surface-500 hover:bg-surface-50"
                     }`}
                   >
                     {slot}
@@ -296,8 +307,8 @@ export const OnboardingWizard: React.FC = () => {
         {step === 2 && (
           <div className="space-y-5 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">What areas of life do you want to work on?</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">What areas of life do you want to work on?</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 Select your focus areas. You control your priorities—the OS never assumes.
               </p>
             </div>
@@ -311,8 +322,8 @@ export const OnboardingWizard: React.FC = () => {
                     onClick={() => toggleItem(selectedAreas, setSelectedAreas, area)}
                     className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
                       isSelected
-                        ? "bg-brand-500/10 border-brand-500 text-brand-600 dark:text-brand-400 font-semibold"
-                        : "border-surface-200 dark:border-surface-700 text-surface-500 hover:text-foreground"
+                        ? "bg-brand-500/10 border-brand-500 text-brand-600 font-semibold"
+                        : "border-surface-200 text-surface-500 hover:text-foreground hover:bg-surface-50"
                     }`}
                   >
                     {area}
@@ -321,7 +332,7 @@ export const OnboardingWizard: React.FC = () => {
               })}
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-2">
+              <label className="block text-xs font-semibold text-surface-700 mb-2">
                 Top 3 priorities right now:
               </label>
               <div className="flex flex-wrap gap-2">
@@ -334,8 +345,8 @@ export const OnboardingWizard: React.FC = () => {
                       onClick={() => toggleItem(priorityAreas, setPriorityAreas, area)}
                       className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
                         isPriority
-                          ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-semibold"
-                          : "border-surface-200 dark:border-surface-700 text-surface-400"
+                          ? "bg-emerald-500/10 border-emerald-500 text-emerald-600 font-semibold"
+                          : "border-surface-200 text-surface-400 hover:bg-surface-50"
                       }`}
                     >
                       ★ {area}
@@ -351,8 +362,8 @@ export const OnboardingWizard: React.FC = () => {
         {step === 3 && (
           <div className="space-y-5 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">What is currently getting in your way?</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">What is currently getting in your way?</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 Pick the single biggest obstacle. We will design interventions around it.
               </p>
             </div>
@@ -366,8 +377,8 @@ export const OnboardingWizard: React.FC = () => {
                     onClick={() => setPrimaryBottleneck(prob)}
                     className={`p-2.5 rounded-lg border text-xs text-left transition-all ${
                       isPrimary
-                        ? "bg-rose-500/10 border-rose-500 text-rose-600 dark:text-rose-400 font-semibold ring-1 ring-rose-500"
-                        : "border-surface-200 dark:border-surface-700 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800"
+                        ? "bg-rose-500/10 border-rose-500 text-rose-600 font-semibold ring-1 ring-rose-500"
+                        : "border-surface-200 text-surface-600 hover:bg-surface-50"
                     }`}
                   >
                     {prob}
@@ -382,17 +393,17 @@ export const OnboardingWizard: React.FC = () => {
         {step === 4 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Behavioral Patterns</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Behavioral Patterns</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 How do you genuinely respond when work gets real?
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">When you have an important task, what usually happens?</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">When you have an important task, what usually happens?</label>
               <select
                 value={onImportantTask}
                 onChange={(e) => setOnImportantTask(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               >
                 <option value="I start immediately.">I start immediately.</option>
                 <option value="I plan too much.">I plan too much.</option>
@@ -403,11 +414,11 @@ export const OnboardingWizard: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">When a task becomes difficult, what usually happens?</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">When a task becomes difficult, what usually happens?</label>
               <select
                 value={onDifficultTask}
                 onChange={(e) => setOnDifficultTask(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               >
                 <option value="I keep going.">I keep going.</option>
                 <option value="I search for tutorials.">I search for tutorials.</option>
@@ -417,11 +428,11 @@ export const OnboardingWizard: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">When you miss one day of routine, what usually happens?</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">When you miss one day of routine, what usually happens?</label>
               <select
                 value={onMissedDay}
                 onChange={(e) => setOnMissedDay(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               >
                 <option value="I restart the next day.">I restart the next day.</option>
                 <option value="I miss a few more days.">I miss a few more days.</option>
@@ -436,13 +447,13 @@ export const OnboardingWizard: React.FC = () => {
         {step === 5 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Digital Life & Screen Time</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Digital Life & Screen Time</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 Non-judgmental diagnostic to calibrate healthy creation/consumption ratios.
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">Approximate daily screen time</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">Approximate daily screen time</label>
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                 {["<1 hour", "1–2", "2–4", "4–6", "6–8", "8+"].map((hrs) => (
                   <button
@@ -451,8 +462,8 @@ export const OnboardingWizard: React.FC = () => {
                     onClick={() => setScreenTime(hrs)}
                     className={`py-2 text-xs rounded-lg border text-center transition-colors ${
                       screenTime === hrs
-                        ? "bg-brand-500/10 border-brand-500 text-brand-600 dark:text-brand-400 font-semibold"
-                        : "border-surface-200 dark:border-surface-700 text-surface-500"
+                        ? "bg-brand-500/10 border-brand-500 text-brand-600 font-semibold"
+                        : "border-surface-200 text-surface-500 hover:bg-surface-50"
                     }`}
                   >
                     {hrs} hrs
@@ -461,12 +472,12 @@ export const OnboardingWizard: React.FC = () => {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">Top distracting apps or websites</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">Top distracting apps or websites</label>
               <input
                 type="text"
                 value={distractingApps}
                 onChange={(e) => setDistractingApps(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               />
             </div>
           </div>
@@ -476,46 +487,46 @@ export const OnboardingWizard: React.FC = () => {
         {step === 6 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Routine & Circadian Window</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Routine & Circadian Window</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 Compare typical times vs your realistic target.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">Typical Wake</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Typical Wake</label>
                 <input
                   type="time"
                   value={typicalWake}
                   onChange={(e) => setTypicalWake(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Desired Wake</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Desired Wake</label>
                 <input
                   type="time"
                   value={desiredWake}
                   onChange={(e) => setDesiredWake(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Typical Bedtime</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Typical Bedtime</label>
                 <input
                   type="time"
                   value={typicalSleep}
                   onChange={(e) => setTypicalSleep(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Desired Bedtime</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Desired Bedtime</label>
                 <input
                   type="time"
                   value={desiredSleep}
                   onChange={(e) => setDesiredSleep(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
                 />
               </div>
             </div>
@@ -526,13 +537,13 @@ export const OnboardingWizard: React.FC = () => {
         {step === 7 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Energy Profile</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Energy Profile</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 When should your hardest work happen?
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">When do you feel most energetic?</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">When do you feel most energetic?</label>
               <div className="grid grid-cols-3 gap-2">
                 {["Early morning", "Morning", "Afternoon", "Evening", "Night", "Unpredictable"].map((w) => (
                   <button
@@ -541,8 +552,8 @@ export const OnboardingWizard: React.FC = () => {
                     onClick={() => setEnergeticWindow(w)}
                     className={`py-2 text-xs rounded-lg border text-center transition-colors ${
                       energeticWindow === w
-                        ? "bg-brand-500/10 border-brand-500 text-brand-600 dark:text-brand-400 font-semibold"
-                        : "border-surface-200 dark:border-surface-700 text-surface-500"
+                        ? "bg-brand-500/10 border-brand-500 text-brand-600 font-semibold"
+                        : "border-surface-200 text-surface-500 hover:bg-surface-50"
                     }`}
                   >
                     {w}
@@ -557,29 +568,29 @@ export const OnboardingWizard: React.FC = () => {
         {step === 8 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Role-Specific Calibration</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Role-Specific Calibration</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 Custom parameters tailored for your path.
               </p>
             </div>
             {occupation === "student" ? (
               <div>
-                <label className="block text-xs font-semibold mb-1">Degree / Course</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Degree / Course</label>
                 <input
                   type="text"
                   value={studentCourse}
                   onChange={(e) => setStudentCourse(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
                 />
               </div>
             ) : (
               <div>
-                <label className="block text-xs font-semibold mb-1">Primary Tech Stack / Tools</label>
+                <label className="block text-xs font-semibold text-surface-700 mb-1">Primary Tech Stack / Tools</label>
                 <input
                   type="text"
                   value={devLangs}
                   onChange={(e) => setDevLangs(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
                 />
               </div>
             )}
@@ -590,36 +601,36 @@ export const OnboardingWizard: React.FC = () => {
         {step === 9 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">90-Day Vision</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">90-Day Vision</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 What do you want to accomplish in the next 90 days?
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">BUILD: Tangible output or product</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">BUILD: Tangible output or product</label>
               <input
                 type="text"
                 value={goalBuild}
                 onChange={(e) => setGoalBuild(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">BECOME: Identity change</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">BECOME: Identity change</label>
               <input
                 type="text"
                 value={goalBecome}
                 onChange={(e) => setGoalBecome(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">STOP: Destructive habit to eliminate</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">STOP: Destructive habit to eliminate</label>
               <input
                 type="text"
                 value={goalStop}
                 onChange={(e) => setGoalStop(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
               />
             </div>
           </div>
@@ -629,24 +640,24 @@ export const OnboardingWizard: React.FC = () => {
         {step === 10 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold">Definition of Success & Tone</h3>
-              <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+              <h3 className="text-lg font-bold text-foreground">Definition of Success & Tone</h3>
+              <p className="text-xs text-surface-500 mt-1">
                 How will you know these 90 days were worth it?
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">
+              <label className="block text-xs font-semibold text-surface-700 mb-1">
                 "If I look back after 90 days, what would make me say: 'These 90 days were worth it'?"
               </label>
               <textarea
                 rows={3}
                 value={successDef}
                 onChange={(e) => setSuccessDef(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1">Coaching Communication Style</label>
+              <label className="block text-xs font-semibold text-surface-700 mb-1">Coaching Communication Style</label>
               <div className="grid grid-cols-4 gap-2">
                 {(["GENTLE", "DIRECT", "ANALYTICAL", "BALANCED"] as CoachingStyle[]).map((style) => (
                   <button
@@ -655,8 +666,8 @@ export const OnboardingWizard: React.FC = () => {
                     onClick={() => setCoachStyle(style)}
                     className={`py-2 text-xs rounded-lg border text-center font-semibold transition-colors ${
                       coachStyle === style
-                        ? "bg-brand-500/10 border-brand-500 text-brand-600 dark:text-brand-400"
-                        : "border-surface-200 dark:border-surface-700 text-surface-500"
+                        ? "bg-brand-500/10 border-brand-500 text-brand-600"
+                        : "border-surface-200 text-surface-500 hover:bg-surface-50"
                     }`}
                   >
                     {style}
@@ -668,13 +679,13 @@ export const OnboardingWizard: React.FC = () => {
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex items-center justify-between pt-6 border-t border-surface-200/80 dark:border-surface-700/60 mt-6">
+        <div className="flex items-center justify-between pt-6 border-t border-surface-200 mt-6">
           {step > 1 ? (
             <Button
               variant="secondary"
               size="sm"
               onClick={() => setStep(step - 1)}
-              className="gap-1.5"
+              className="gap-1.5 shadow-sm"
             >
               <ArrowLeft size={14} /> Back
             </Button>
@@ -687,7 +698,7 @@ export const OnboardingWizard: React.FC = () => {
               variant="primary"
               size="sm"
               onClick={() => setStep(step + 1)}
-              className="gap-1.5"
+              className="gap-1.5 shadow-sm"
             >
               Next <ArrowRight size={14} />
             </Button>
@@ -696,7 +707,7 @@ export const OnboardingWizard: React.FC = () => {
               variant="primary"
               size="md"
               onClick={handleFinishOnboarding}
-              className="gap-2 bg-emerald-600 hover:bg-emerald-500"
+              className="gap-2 bg-emerald-600 hover:bg-emerald-500 shadow-sm"
             >
               <Sparkles size={16} /> Confirm & Launch My OS
             </Button>

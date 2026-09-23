@@ -11,20 +11,20 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", isLoading, children, disabled, ...props }, ref) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]";
+      "inline-flex items-center justify-center font-medium rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]";
 
     const variantStyles = {
-      primary: "bg-brand-600 text-white hover:bg-brand-500 shadow-sm",
-      secondary: "bg-surface-200 dark:bg-surface-700/60 text-foreground hover:bg-surface-300 dark:hover:bg-surface-700 border border-surface-300/60 dark:border-surface-600/40",
-      subtle: "bg-surface-100 dark:bg-surface-800 text-surface-700 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700",
-      danger: "bg-rose-600 text-white hover:bg-rose-500 shadow-sm",
-      ghost: "hover:bg-surface-200/60 dark:hover:bg-surface-800 text-surface-600 dark:text-surface-400 hover:text-foreground",
+      primary: "bg-orange-600 text-white hover:bg-orange-500 shadow-sm shadow-orange-500/20",
+      secondary: "bg-white text-slate-800 hover:bg-slate-50 border border-slate-200/90 shadow-xs",
+      subtle: "bg-slate-100 text-slate-700 hover:bg-slate-200/80",
+      danger: "bg-rose-600 text-white hover:bg-rose-500 shadow-sm shadow-rose-500/20",
+      ghost: "hover:bg-slate-100/80 text-slate-600 hover:text-slate-900",
     };
 
     const sizeStyles = {
-      sm: "text-xs px-2.5 py-1.5 h-8 gap-1.5",
-      md: "text-sm px-3.5 py-2 h-9.5 gap-2",
-      lg: "text-base px-5 py-2.5 h-11 gap-2.5",
+      sm: "text-xs px-3 py-1.5 h-8 gap-1.5",
+      md: "text-xs sm:text-sm px-4 py-2 h-9.5 gap-2",
+      lg: "text-sm sm:text-base px-5 py-2.5 h-11 gap-2.5 font-semibold",
     };
 
     return (

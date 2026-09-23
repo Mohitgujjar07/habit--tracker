@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Personal Transformation OS — Execution Engine & Adaptive Habit System",
+  title: "comeback.mjg — A Better You. Everyday.",
   description:
-    "A personal operating system that bridges the gap between intention and execution. Know yourself. Do the work. Become who you want to be.",
+    "Small steps, big changes. A personal operating system and execution engine that turns goals into actions and actions into lasting progress.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -13,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased min-h-screen bg-background text-foreground">
+    <html lang="en" className="bg-slate-50 text-slate-900">
+      <body className="antialiased min-h-screen bg-slate-50 text-slate-900 selection:bg-orange-500/20">
         {children}
       </body>
     </html>

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { UserProfile } from "@/types";
-import { Sparkles, Calendar } from "lucide-react";
 
 interface HomeHeaderProps {
   profile: UserProfile | null;
@@ -17,27 +16,27 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({ profile }) => {
   const day = profile?.transformationDay || 24;
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-surface-200/60 dark:border-surface-800/80">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
       <div>
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
             {greeting}, {name}
           </h1>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-orange-50 text-orange-600 border border-orange-200">
             DAY {day} / 90
           </span>
         </div>
-        <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
-          Turn your goals into actions, your actions into evidence, and your evidence into lasting progress.
+        <p className="text-xs text-slate-500 font-medium mt-1">
+          A better you. Everyday. Small steps lead to lasting momentum.
         </p>
       </div>
 
       <div className="flex items-center gap-2 self-start sm:self-center">
-        <div className="text-right">
-          <div className="text-[10px] font-mono text-surface-400 uppercase tracking-wider">
+        <div className="text-left sm:text-right">
+          <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">
             Current Phase
           </div>
-          <div className="text-xs font-semibold text-foreground">
+          <div className="text-xs font-bold text-slate-800">
             Phase 2: Digital & Execution Build
           </div>
         </div>

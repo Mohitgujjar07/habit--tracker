@@ -55,15 +55,15 @@ export const ProjectsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto p-4 sm:p-6 animate-in fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-surface-200/80 dark:border-surface-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-surface-200">
         <div>
-          <span className="text-[10px] font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 font-semibold">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-brand-600 font-bold">
             EXECUTION PIPELINE
           </span>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Projects & Milestones
           </h1>
-          <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+          <p className="text-xs text-surface-500 mt-1">
             Track momentum, active blockers, and tangible milestone velocity.
           </p>
         </div>
@@ -73,7 +73,7 @@ export const ProjectsView: React.FC = () => {
             variant="primary"
             size="sm"
             onClick={() => setIsQuickActionOpen(true)}
-            className="gap-1.5 text-xs"
+            className="gap-1.5 text-xs shadow-sm"
           >
             <Plus size={15} />
             <span>New Project</span>
@@ -83,7 +83,7 @@ export const ProjectsView: React.FC = () => {
 
       {/* Project Fragmentation Warning (Section 88) */}
       {activeCount > 3 && (
-        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-300 flex items-center justify-between gap-3">
+        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center gap-2">
             <AlertTriangle size={16} className="text-amber-500 shrink-0" />
             <span>
@@ -102,7 +102,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3 py-1.5 rounded-lg capitalize font-medium transition-colors ${
               filterStatus === st
                 ? "bg-brand-500 text-white shadow-xs"
-                : "bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-400 hover:text-foreground"
+                : "bg-surface-100 text-surface-600 hover:text-foreground"
             }`}
           >
             {st}
@@ -115,7 +115,7 @@ export const ProjectsView: React.FC = () => {
         {filteredProjects.map((p) => {
           const hoursInvested = (p.timeInvestedMinutes / 60).toFixed(1);
           return (
-            <Card key={p.id} className="p-5 space-y-4 hoverEffect">
+            <Card key={p.id} className="p-5 space-y-4 hoverEffect bg-white border-surface-200/80 shadow-sm">
               <div className="flex items-start justify-between gap-2">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export const ProjectsView: React.FC = () => {
                     </span>
                   </div>
                   <h3 className="text-base font-bold text-foreground">{p.title}</h3>
-                  <p className="text-xs text-surface-500 dark:text-surface-400 line-clamp-2">
+                  <p className="text-xs text-surface-600 line-clamp-2">
                     {p.description}
                   </p>
                 </div>
@@ -137,15 +137,15 @@ export const ProjectsView: React.FC = () => {
                     <Flame size={14} />
                     <span>{p.momentumScore}%</span>
                   </div>
-                  <span className="text-[10px] text-surface-400 uppercase">Momentum</span>
+                  <span className="text-[10px] text-surface-400 uppercase font-semibold">Momentum</span>
                 </div>
               </div>
 
               {/* Next Action Box */}
               {p.nextActionTitle && (
-                <div className="p-2.5 rounded-lg bg-surface-50 dark:bg-surface-800/60 border border-surface-200/50 dark:border-surface-700/40 text-xs flex items-center justify-between gap-2">
+                <div className="p-2.5 rounded-lg bg-surface-50 border border-surface-200/80 text-xs flex items-center justify-between gap-2">
                   <div className="truncate">
-                    <span className="text-[10px] font-mono uppercase text-brand-600 dark:text-brand-400 font-bold block">
+                    <span className="text-[10px] font-mono uppercase text-brand-600 font-bold block">
                       Next Action
                     </span>
                     <span className="font-medium text-foreground truncate block">
@@ -168,8 +168,8 @@ export const ProjectsView: React.FC = () => {
                         onClick={() => handleToggleMilestone(p, m.id)}
                         className={`w-full text-left p-2 rounded-lg border text-xs flex items-center gap-2.5 transition-colors ${
                           m.isCompleted
-                            ? "bg-emerald-500/10 border-emerald-500/20 text-surface-400 line-through"
-                            : "bg-surface-50/50 dark:bg-surface-800/40 border-surface-200 dark:border-surface-700/60 text-foreground"
+                            ? "bg-emerald-50 border-emerald-200 text-surface-400 line-through"
+                            : "bg-surface-50/70 border-surface-200 text-foreground hover:bg-surface-100"
                         }`}
                       >
                         {m.isCompleted ? (
@@ -185,7 +185,7 @@ export const ProjectsView: React.FC = () => {
               )}
 
               {/* Progress bar */}
-              <div className="w-full bg-surface-200 dark:bg-surface-700 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-surface-200 h-2 rounded-full overflow-hidden">
                 <div
                   className="bg-brand-500 h-full rounded-full transition-all duration-500"
                   style={{ width: `${p.progressPercent}%` }}

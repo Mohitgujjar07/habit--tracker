@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { DetectedPattern } from "@/lib/engines/patternEngine";
 import { Button } from "@/components/ui/Button";
-import { Sparkles, Eye, X, ArrowRight } from "lucide-react";
+import { Eye } from "lucide-react";
 
 interface PatternsNoticeProps {
   patterns: DetectedPattern[];
@@ -26,28 +26,28 @@ export const PatternsNotice: React.FC<PatternsNoticeProps> = ({
   };
 
   return (
-    <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/[0.04] dark:bg-indigo-500/[0.07] backdrop-blur-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in">
+    <div className="p-4 sm:p-5 rounded-2xl border border-orange-200/90 bg-gradient-to-r from-orange-50/80 to-amber-50/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in">
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 mt-0.5">
-          <Eye size={16} />
+        <div className="p-2.5 rounded-xl bg-orange-100 text-orange-600 mt-0.5 shadow-xs">
+          <Eye size={18} />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-600 dark:text-indigo-400 font-bold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-orange-700 font-bold">
               OBSERVED PATTERN IN YOUR DATA
             </span>
           </div>
-          <h4 className="text-xs sm:text-sm font-bold text-foreground mt-0.5">
+          <h4 className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">
             {topPattern.title}
           </h4>
-          <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
+          <p className="text-xs text-slate-600 mt-1 leading-relaxed">
             {topPattern.observation}{" "}
-            <span className="text-foreground font-medium">{topPattern.suggestedAction}</span>
+            <span className="text-slate-900 font-semibold">{topPattern.suggestedAction}</span>
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 self-end sm:self-center">
+      <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
         {topPattern.requiresConfirmation && onConfirmPattern && (
           <Button
             variant="primary"
@@ -62,7 +62,7 @@ export const PatternsNotice: React.FC<PatternsNoticeProps> = ({
           variant="ghost"
           size="sm"
           onClick={() => handleDismiss(topPattern.id)}
-          className="text-xs text-surface-400 hover:text-foreground"
+          className="text-xs text-slate-500 hover:text-slate-800"
         >
           Dismiss
         </Button>

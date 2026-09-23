@@ -98,7 +98,7 @@ export const TaskDecomposerModal: React.FC<TaskDecomposerModalProps> = ({
       {!result ? (
         <form onSubmit={handleDecompose} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-surface-600 mb-1">
               What ambition or large project do you want to deconstruct?
             </label>
             <input
@@ -107,7 +107,7 @@ export const TaskDecomposerModal: React.FC<TaskDecomposerModalProps> = ({
               placeholder="e.g. Build an AI-powered SaaS MVP, Prepare for final exams..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm"
             />
           </div>
 
@@ -117,7 +117,7 @@ export const TaskDecomposerModal: React.FC<TaskDecomposerModalProps> = ({
               variant="primary"
               size="md"
               isLoading={isLoading}
-              className="gap-2"
+              className="gap-2 shadow-sm"
             >
               <Sparkles size={15} />
               <span>Decompose into Slices</span>
@@ -127,7 +127,7 @@ export const TaskDecomposerModal: React.FC<TaskDecomposerModalProps> = ({
       ) : (
         <div className="space-y-4">
           <div className="p-3.5 rounded-xl bg-brand-500/10 border border-brand-500/20 text-xs">
-            <div className="text-[10px] font-mono uppercase text-brand-600 dark:text-brand-400 font-bold mb-0.5">
+            <div className="text-[10px] font-mono uppercase text-brand-600 font-bold mb-0.5">
               Target Project & Milestones
             </div>
             <div className="font-bold text-foreground text-sm">{result.projectTitle}</div>
@@ -142,13 +142,13 @@ export const TaskDecomposerModal: React.FC<TaskDecomposerModalProps> = ({
 
           {/* Generated tasks */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-surface-600 dark:text-surface-400 block">
+            <span className="text-xs font-semibold text-surface-600 block">
               Concrete Action Steps (Editable):
             </span>
             {result.tasks.map((task, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-lg border border-surface-200/80 dark:border-surface-700/80 bg-surface-50/70 dark:bg-surface-800/40 flex items-center justify-between text-xs"
+                className="p-3 rounded-lg border border-surface-200 bg-surface-50/80 flex items-center justify-between text-xs"
               >
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-brand-500 font-bold">{idx + 1}.</span>
@@ -167,15 +167,15 @@ export const TaskDecomposerModal: React.FC<TaskDecomposerModalProps> = ({
           </div>
 
           {/* Immediate Next Action */}
-          <div className="p-3 rounded-lg bg-surface-100 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 text-xs flex items-center gap-2">
+          <div className="p-3 rounded-lg bg-surface-100 border border-surface-200 text-xs flex items-center gap-2">
             <CornerDownRight size={14} className="text-brand-500 shrink-0" />
             <div>
               <span className="font-semibold text-foreground">Suggested First Action: </span>
-              <span className="text-surface-600 dark:text-surface-300">{result.immediateNextAction}</span>
+              <span className="text-surface-700">{result.immediateNextAction}</span>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-surface-200 dark:border-surface-700">
+          <div className="flex items-center justify-between pt-3 border-t border-surface-200">
             <Button
               variant="ghost"
               size="sm"

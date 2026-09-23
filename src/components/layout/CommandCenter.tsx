@@ -73,20 +73,20 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 overflow-y-auto">
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white dark:bg-surface-100 border border-surface-200 dark:border-surface-700 rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95">
+      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-10 animate-in zoom-in-95">
         {/* Search input */}
-        <div className="flex items-center px-4 py-3.5 border-b border-surface-200/80 dark:border-surface-700/60 gap-3">
-          <Search size={18} className="text-surface-400" />
+        <div className="flex items-center px-4 py-3.5 border-b border-slate-200 gap-3">
+          <Search size={18} className="text-slate-400" />
           <input
             autoFocus
             type="text"
             placeholder="Type a command or search action..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 bg-transparent text-sm text-foreground focus:outline-none placeholder:text-surface-400"
+            className="flex-1 bg-transparent text-sm text-slate-900 focus:outline-none placeholder:text-slate-400 font-medium"
           />
-          <kbd className="font-mono text-[10px] bg-surface-200 dark:bg-surface-800 px-1.5 py-0.5 rounded text-surface-500">
+          <kbd className="font-mono text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500">
             ESC
           </kbd>
         </div>
@@ -94,7 +94,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
         {/* Command List */}
         <div className="max-h-80 overflow-y-auto p-2 space-y-1">
           {filtered.length === 0 ? (
-            <div className="p-6 text-center text-xs text-surface-400">
+            <div className="p-6 text-center text-xs text-slate-400">
               No matching commands found.
             </div>
           ) : (
@@ -107,15 +107,15 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
                     cmd.action();
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-surface-700 dark:text-surface-300 hover:text-foreground hover:bg-surface-100 dark:hover:bg-surface-800/80 transition-colors text-left group"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-orange-50/80 transition-colors text-left group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-1.5 rounded-md bg-surface-100 dark:bg-surface-800 text-surface-500 group-hover:text-brand-500 transition-colors">
+                    <div className="p-1.5 rounded-lg bg-slate-100 text-slate-500 group-hover:bg-orange-100 group-hover:text-orange-600 transition-colors">
                       <Icon size={16} />
                     </div>
                     <span>{cmd.title}</span>
                   </div>
-                  <span className="text-[10px] font-mono text-surface-400 uppercase tracking-wider">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
                     {cmd.category}
                   </span>
                 </button>

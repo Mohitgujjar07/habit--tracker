@@ -35,7 +35,6 @@ export const ImStuckModal: React.FC<ImStuckModalProps> = ({
 
   const handleSelectReason = (reason: string) => {
     setSelectedReason(reason);
-    // Generate a concrete 2-minute micro-action
     let action = "";
     if (reason === "Don't know where to start") {
       action = `Open the code file or document and write a 2-bullet outline for "${currentTaskTitle}".`;
@@ -103,7 +102,7 @@ export const ImStuckModal: React.FC<ImStuckModalProps> = ({
     >
       {!microAction ? (
         <div className="space-y-4">
-          <p className="text-xs font-semibold text-surface-600 dark:text-surface-400">
+          <p className="text-xs font-semibold text-slate-700">
             What is currently causing friction?
           </p>
           <div className="grid grid-cols-1 gap-2">
@@ -111,10 +110,10 @@ export const ImStuckModal: React.FC<ImStuckModalProps> = ({
               <button
                 key={r}
                 onClick={() => handleSelectReason(r)}
-                className="w-full text-left px-3.5 py-2.5 rounded-lg border border-surface-200 dark:border-surface-700/80 bg-surface-50 dark:bg-surface-800/60 hover:bg-brand-500/10 hover:border-brand-500/40 text-xs font-medium text-foreground transition-all flex items-center justify-between"
+                className="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-orange-50 hover:border-orange-300 text-xs font-semibold text-slate-800 transition-all flex items-center justify-between shadow-xs"
               >
                 <span>{r}</span>
-                <span className="text-[10px] text-surface-400">→</span>
+                <span className="text-[10px] text-orange-500 font-bold">→</span>
               </button>
             ))}
           </div>
@@ -122,21 +121,21 @@ export const ImStuckModal: React.FC<ImStuckModalProps> = ({
       ) : (
         <div className="space-y-5 text-center py-2">
           {/* Micro Action card */}
-          <div className="p-4 rounded-xl bg-brand-500/10 border border-brand-500/20 text-left">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-brand-600 dark:text-brand-400 font-semibold block mb-1">
+          <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200 text-left shadow-xs">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-orange-600 font-bold block mb-1">
               Your 2-Minute Starter Action
             </span>
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-bold text-slate-900 leading-snug">
               {microAction}
             </p>
           </div>
 
           {/* Large 2-minute countdown */}
           <div className="py-2">
-            <div className="font-mono text-5xl font-bold tracking-tight text-foreground">
+            <div className="font-mono text-5xl sm:text-6xl font-black tracking-tight text-slate-900">
               {timeStr}
             </div>
-            <p className="text-xs text-surface-400 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Do nothing else. Just execute this 2-minute action.
             </p>
           </div>

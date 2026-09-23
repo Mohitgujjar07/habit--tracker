@@ -10,7 +10,6 @@ import {
   Target,
   Smile,
   Moon,
-  Dumbbell,
   AlertCircle,
   Flame,
 } from "lucide-react";
@@ -192,7 +191,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Quick Action" maxWidth="lg">
       {/* Tab selection */}
-      <div className="flex items-center gap-1 overflow-x-auto pb-2 border-b border-surface-200/80 dark:border-surface-700/60 mb-4">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-slate-200 mb-4">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.key;
@@ -200,13 +199,13 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
                 isActive
-                  ? "bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold"
-                  : "text-surface-500 hover:text-foreground hover:bg-surface-100 dark:hover:bg-surface-800"
+                  ? "bg-orange-50 text-orange-600 border border-orange-200 shadow-xs"
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
               }`}
             >
-              <Icon size={14} />
+              <Icon size={14} className={isActive ? "text-orange-500" : "text-slate-400"} />
               <span>{tab.label}</span>
             </button>
           );
@@ -217,7 +216,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
       {activeTab === "task" && (
         <form onSubmit={handleCreateTask} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Task Title
             </label>
             <input
@@ -226,18 +225,18 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               placeholder="e.g. Implement webhook authentication receiver"
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xs"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Priority
               </label>
               <select
                 value={taskPriority}
                 onChange={(e) => setTaskPriority(e.target.value as any)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none shadow-xs font-medium"
               >
                 <option value="critical">Critical</option>
                 <option value="high">High</option>
@@ -246,7 +245,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Estimated Minutes
               </label>
               <input
@@ -256,7 +255,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
                 step={5}
                 value={taskMinutes}
                 onChange={(e) => setTaskMinutes(Number(e.target.value))}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none shadow-xs font-medium"
               />
             </div>
           </div>
@@ -272,7 +271,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
       {activeTab === "project" && (
         <form onSubmit={handleCreateProject} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Project Title
             </label>
             <input
@@ -281,11 +280,11 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               placeholder="e.g. Core Telemetry Ingestion Engine"
               value={projectTitle}
               onChange={(e) => setProjectTitle(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xs"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Outcome Description
             </label>
             <textarea
@@ -293,7 +292,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               placeholder="What tangible output marks this project complete?"
               value={projectDesc}
               onChange={(e) => setProjectDesc(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xs"
             />
           </div>
           <div className="flex justify-end pt-2">
@@ -308,7 +307,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
       {activeTab === "goal" && (
         <form onSubmit={handleCreateGoal} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               90-Day Vision Goal
             </label>
             <input
@@ -317,11 +316,11 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               placeholder="e.g. Ship SaaS MVP with first 5 beta pilots"
               value={goalTitle}
               onChange={(e) => setGoalTitle(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xs"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Category
             </label>
             <div className="grid grid-cols-4 gap-2">
@@ -330,10 +329,10 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
                   key={cat}
                   type="button"
                   onClick={() => setGoalCategory(cat)}
-                  className={`py-1.5 text-xs font-semibold rounded-lg border text-center transition-colors ${
+                  className={`py-1.5 text-xs font-semibold rounded-xl border text-center transition-colors ${
                     goalCategory === cat
-                      ? "bg-brand-500/10 border-brand-500 text-brand-600 dark:text-brand-400"
-                      : "border-surface-200 dark:border-surface-700 text-surface-500"
+                      ? "bg-orange-50 border-orange-500 text-orange-600 shadow-xs"
+                      : "border-slate-200 text-slate-500 hover:bg-slate-50"
                   }`}
                 >
                   {cat}
@@ -356,7 +355,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
             <div>
               <div className="flex justify-between text-xs font-semibold mb-1">
                 <span>Mood (1-10)</span>
-                <span className="font-mono text-brand-600 dark:text-brand-400">{moodVal}/10</span>
+                <span className="font-mono text-orange-600 font-bold">{moodVal}/10</span>
               </div>
               <input
                 type="range"
@@ -364,13 +363,13 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
                 max={10}
                 value={moodVal}
                 onChange={(e) => setMoodVal(Number(e.target.value))}
-                className="w-full accent-brand-500"
+                className="w-full accent-orange-500"
               />
             </div>
             <div>
               <div className="flex justify-between text-xs font-semibold mb-1">
                 <span>Energy (1-10)</span>
-                <span className="font-mono text-brand-600 dark:text-brand-400">{energyVal}/10</span>
+                <span className="font-mono text-amber-600 font-bold">{energyVal}/10</span>
               </div>
               <input
                 type="range"
@@ -378,13 +377,13 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
                 max={10}
                 value={energyVal}
                 onChange={(e) => setEnergyVal(Number(e.target.value))}
-                className="w-full accent-brand-500"
+                className="w-full accent-amber-500"
               />
             </div>
             <div>
               <div className="flex justify-between text-xs font-semibold mb-1">
                 <span>Stress (1-10)</span>
-                <span className="font-mono text-rose-500">{stressVal}/10</span>
+                <span className="font-mono text-rose-500 font-bold">{stressVal}/10</span>
               </div>
               <input
                 type="range"
@@ -404,11 +403,51 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
         </form>
       )}
 
+      {/* Sleep Form */}
+      {activeTab === "sleep" && (
+        <form onSubmit={handleLogSleep} className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Sleep Duration (Hours)
+              </label>
+              <input
+                type="number"
+                step={0.25}
+                min={2}
+                max={16}
+                value={sleepHours}
+                onChange={(e) => setSleepHours(Number(e.target.value))}
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none shadow-xs font-medium"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Quality (1-10)
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={sleepQuality}
+                onChange={(e) => setSleepQuality(Number(e.target.value))}
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none shadow-xs font-medium"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end pt-2">
+            <Button type="submit" variant="primary" size="md">
+              Save Sleep Log
+            </Button>
+          </div>
+        </form>
+      )}
+
       {/* Distraction Form */}
       {activeTab === "distraction" && (
         <form onSubmit={handleLogDistraction} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               What triggered the urge to distract?
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -417,10 +456,10 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
                   key={trig}
                   type="button"
                   onClick={() => setDistractionTrigger(trig)}
-                  className={`py-1.5 text-xs rounded-lg border text-center transition-colors ${
+                  className={`py-1.5 text-xs rounded-xl border text-center transition-colors ${
                     distractionTrigger === trig
-                      ? "bg-rose-500/10 border-rose-500 text-rose-600 dark:text-rose-400 font-semibold"
-                      : "border-surface-200 dark:border-surface-700 text-surface-500"
+                      ? "bg-rose-50 border-rose-300 text-rose-700 font-semibold shadow-xs"
+                      : "border-slate-200 text-slate-600 hover:bg-slate-50"
                   }`}
                 >
                   {trig}
@@ -429,7 +468,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
             </div>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               What were you trying to avoid? (Optional)
             </label>
             <input
@@ -437,7 +476,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               placeholder="e.g. Unclear error message in terminal"
               value={distractionNote}
               onChange={(e) => setDistractionNote(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none shadow-xs"
             />
           </div>
           <div className="flex justify-end pt-2">
@@ -452,7 +491,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
       {activeTab === "frustration" && (
         <form onSubmit={handleLogFrustration} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-600 dark:text-surface-400 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               What caused friction or resistance?
             </label>
             <textarea
@@ -461,13 +500,13 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
               placeholder="e.g. Tried to implement state synchronization and hit unexpected re-renders..."
               value={frustrationContext}
               onChange={(e) => setFrustrationContext(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xs"
             />
           </div>
           <div>
             <div className="flex justify-between text-xs font-semibold mb-1">
               <span>Frustration Intensity (1-10)</span>
-              <span className="font-mono text-rose-500">{frustrationLevel}/10</span>
+              <span className="font-mono text-rose-600 font-bold">{frustrationLevel}/10</span>
             </div>
             <input
               type="range"

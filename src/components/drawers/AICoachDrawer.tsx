@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { X, Bot, Send, Sparkles, RefreshCw, Zap } from "lucide-react";
+import React, { useState } from "react";
+import { X, Bot, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { AIService } from "@/services/aiService";
 import { DataStoreRepository } from "@/repositories/dataStore";
@@ -74,19 +74,19 @@ export const AICoachDrawer: React.FC<AICoachDrawerProps> = ({ isOpen, onClose })
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity" onClick={onClose} />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white dark:bg-surface-100 border-l border-surface-200 dark:border-surface-700/80 shadow-2xl flex flex-col">
+        <div className="w-screen max-w-md bg-white border-l border-slate-200 shadow-2xl flex flex-col">
           {/* Header */}
-          <div className="px-5 py-4 border-b border-surface-200/80 dark:border-surface-700/60 flex items-center justify-between bg-surface-50/50 dark:bg-surface-100/50">
+          <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/70">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-xs">
                 <Bot size={18} />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">AI Execution Coach</h3>
-                <span className="text-[10px] font-mono text-emerald-500 flex items-center gap-1">
+                <h3 className="text-sm font-bold text-slate-900">AI Execution Coach</h3>
+                <span className="text-[10px] font-mono text-emerald-600 font-semibold flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   Active Data Context
                 </span>
@@ -94,19 +94,19 @@ export const AICoachDrawer: React.FC<AICoachDrawerProps> = ({ isOpen, onClose })
             </div>
             <button
               onClick={onClose}
-              className="text-surface-400 hover:text-surface-600 dark:hover:text-surface-200 p-1 rounded-lg"
+              className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100"
             >
               <X size={18} />
             </button>
           </div>
 
           {/* Quick prompt pills */}
-          <div className="px-4 py-2.5 border-b border-surface-200/60 dark:border-surface-700/40 bg-surface-50 dark:bg-surface-800/40 flex items-center gap-1.5 overflow-x-auto text-[11px]">
+          <div className="px-4 py-2.5 border-b border-slate-200 bg-slate-50 flex items-center gap-1.5 overflow-x-auto text-[11px]">
             {quickPrompts.map((p) => (
               <button
                 key={p}
                 onClick={() => handleSend(p)}
-                className="whitespace-nowrap px-2.5 py-1 rounded-full bg-surface-200/60 dark:bg-surface-700/60 hover:bg-brand-500/10 hover:text-brand-500 text-surface-600 dark:text-surface-300 transition-colors"
+                className="whitespace-nowrap px-3 py-1 rounded-full bg-white border border-slate-200 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700 text-slate-600 font-medium transition-all shadow-xs"
               >
                 {p}
               </button>
@@ -114,17 +114,17 @@ export const AICoachDrawer: React.FC<AICoachDrawerProps> = ({ isOpen, onClose })
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3.5">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-slate-50/30">
             {messages.map((m, idx) => (
               <div
                 key={idx}
                 className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed ${
+                  className={`max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed shadow-xs ${
                     m.role === "user"
-                      ? "bg-brand-600 text-white rounded-br-xs"
-                      : "bg-surface-100 dark:bg-surface-800/90 text-foreground border border-surface-200/60 dark:border-surface-700/60 rounded-bl-xs"
+                      ? "bg-orange-600 text-white rounded-br-xs font-medium"
+                      : "bg-white text-slate-800 border border-slate-200 rounded-bl-xs"
                   }`}
                 >
                   {m.text}
@@ -133,15 +133,15 @@ export const AICoachDrawer: React.FC<AICoachDrawerProps> = ({ isOpen, onClose })
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-surface-100 dark:bg-surface-800 p-3 rounded-2xl rounded-bl-xs text-xs text-surface-400 flex items-center gap-2">
-                  <span className="animate-spin text-brand-500">⟳</span> Analyzing your behavioral context...
+                <div className="bg-white border border-slate-200 p-3 rounded-2xl rounded-bl-xs text-xs text-slate-500 flex items-center gap-2 shadow-xs">
+                  <span className="animate-spin text-orange-500">⟳</span> Analyzing your behavioral context...
                 </div>
               </div>
             )}
           </div>
 
           {/* Input Area */}
-          <div className="p-4 border-t border-surface-200/80 dark:border-surface-700/60 bg-surface-50/50 dark:bg-surface-100/50">
+          <div className="p-4 border-t border-slate-200 bg-white">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -154,7 +154,7 @@ export const AICoachDrawer: React.FC<AICoachDrawerProps> = ({ isOpen, onClose })
                 placeholder="Ask coach for clarity, recovery, or priority..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="flex-1 px-3.5 py-2 text-xs rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               <Button type="submit" variant="primary" size="sm" disabled={isLoading || !input.trim()}>
                 <Send size={14} />
