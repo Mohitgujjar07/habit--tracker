@@ -69,10 +69,43 @@ export const OnboardingWizard: React.FC = () => {
     "Starting but not finishing", "Overplanning", "Constantly changing goals",
     "Fear of failure", "Perfectionism", "Getting overwhelmed", "Low consistency",
   ];
-  const [primaryBottleneck, setPrimaryBottleneck] = useState("Starting but not finishing");
-  const [secondaryBottlenecks, setSecondaryBottlenecks] = useState<string[]>([
-    "Phone overuse", "Overplanning",
+  const [selectedProblems, setSelectedProblems] = useState<string[]>([
+    "Fear of failure",
+    "Starting but not finishing",
+    "Phone overuse",
   ]);
+  const [primaryBottleneck, setPrimaryBottleneck] = useState("Fear of failure");
+  const [secondaryBottlenecks, setSecondaryBottlenecks] = useState<string[]>([
+    "Phone overuse", "Starting but not finishing",
+  ]);
+
+  const toggleProblem = (prob: string) => {
+    if (selectedProblems.includes(prob)) {
+      const next = selectedProblems.filter((p) => p !== prob);
+      setSelectedProblems(next);
+      if (primaryBottleneck === prob) {
+        setPrimaryBottleneck(next[0] || "");
+      }
+    } else {
+      const next = [...selectedProblems, prob];
+      setSelectedProblems(next);
+      if (!primaryBottleneck) {
+        setPrimaryBottleneck(prob);
+      }
+    }
+  };
+
+  const handleToggleAllProblems = () => {
+    if (selectedProblems.length === allProblems.length) {
+      setSelectedProblems([]);
+      setPrimaryBottleneck("");
+    } else {
+      setSelectedProblems([...allProblems]);
+      if (!primaryBottleneck) {
+        setPrimaryBottleneck(allProblems[0]);
+      }
+    }
+  };
 
   // Behavioral Profile
   const [onImportantTask, setOnImportantTask] = useState("I plan too much.");
@@ -141,8 +174,10 @@ export const OnboardingWizard: React.FC = () => {
       responsibilities,
       selectedLifeAreas: selectedAreas,
       priorityLifeAreas: priorityAreas,
-      primaryBottleneck,
-      secondaryBottlenecks,
+      primaryBottleneck: primaryBottleneck || selectedProblems[0] || "Procrastination",
+      secondaryBottlenecks: selectedProblems.filter(
+        (p) => p !== (primaryBottleneck || selectedProblems[0])
+      ),
       behaviorProfile: {
         onImportantTask,
         onDifficultTask,
@@ -306,11 +341,31 @@ export const OnboardingWizard: React.FC = () => {
         {/* STEP 2: Life Areas */}
         {step === 2 && (
           <div className="space-y-5 animate-in fade-in">
-            <div>
-              <h3 className="text-lg font-bold text-foreground">What areas of life do you want to work on?</h3>
-              <p className="text-xs text-surface-500 mt-1">
-                Select your focus areas. You control your priorities—the OS never assumes.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-bold text-foreground">What areas of life do you want to work on?</h3>
+                <p className="text-xs text-surface-500 mt-1">
+                  Select your focus areas. You control your priorities—the OS never assumes.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedAreas.length === allLifeAreas.length) {
+                      setSelectedAreas([]);
+                    } else {
+                      setSelectedAreas([...allLifeAreas]);
+                    }
+                  }}
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-300 hover:border-orange-500 bg-white hover:bg-orange-50/50 text-slate-700 hover:text-orange-700 transition-colors shadow-2xs"
+                >
+                  {selectedAreas.length === allLifeAreas.length ? "Deselect All" : "Select All"}
+                </button>
+                <Badge variant={selectedAreas.length > 0 ? "brand" : "default"} size="sm">
+                  {selectedAreas.length} of {allLifeAreas.length} Selected
+                </Badge>
+              </div>
             </div>
             <div className="flex flex-wrap gap-2">
               {allLifeAreas.map((area) => {
@@ -358,34 +413,90 @@ export const OnboardingWizard: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 3: Current Problems & Primary Bottleneck */}
+        {/* STEP 3: Current Problems & Primary Bottleneck (Multi-Select & Select All) */}
         {step === 3 && (
           <div className="space-y-5 animate-in fade-in">
-            <div>
-              <h3 className="text-lg font-bold text-foreground">What is currently getting in your way?</h3>
-              <p className="text-xs text-surface-500 mt-1">
-                Pick the single biggest obstacle. We will design interventions around it.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-bold text-foreground">What is currently getting in your way?</h3>
+                <p className="text-xs text-surface-500 mt-1">
+                  Select all obstacles that apply (or pick multiple). We will design targeted interventions around them.
+                </p>
+              </div>
+
+              {/* Action Buttons: Select All / Deselect All + Counter */}
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={handleToggleAllProblems}
+                  className="px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-300 hover:border-orange-500 bg-white hover:bg-orange-50/50 text-slate-700 hover:text-orange-700 transition-colors shadow-2xs"
+                >
+                  {selectedProblems.length === allProblems.length ? "Deselect All" : "Select All"}
+                </button>
+                <Badge variant={selectedProblems.length > 0 ? "brand" : "default"} size="sm">
+                  {selectedProblems.length} of {allProblems.length} Selected
+                </Badge>
+              </div>
             </div>
+
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {allProblems.map((prob) => {
-                const isPrimary = primaryBottleneck === prob;
+                const isSelected = selectedProblems.includes(prob);
+                const isPrimary = (primaryBottleneck || selectedProblems[0]) === prob;
                 return (
                   <button
                     key={prob}
                     type="button"
-                    onClick={() => setPrimaryBottleneck(prob)}
-                    className={`p-2.5 rounded-lg border text-xs text-left transition-all ${
-                      isPrimary
-                        ? "bg-rose-500/10 border-rose-500 text-rose-600 font-semibold ring-1 ring-rose-500"
-                        : "border-surface-200 text-surface-600 hover:bg-surface-50"
+                    onClick={() => toggleProblem(prob)}
+                    className={`p-3 rounded-xl border text-xs text-left transition-all flex items-center justify-between gap-2 ${
+                      isSelected
+                        ? "bg-rose-50/90 border-rose-400 text-rose-950 font-bold ring-1 ring-rose-400 shadow-2xs"
+                        : "border-slate-200/90 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300"
                     }`}
                   >
-                    {prob}
+                    <span className="truncate">{prob}</span>
+                    {isSelected && (
+                      <div className="flex items-center gap-1 shrink-0">
+                        {isPrimary && (
+                          <span className="text-[9px] font-mono uppercase bg-rose-200/80 text-rose-800 px-1 py-0.2 rounded font-black">
+                            #1
+                          </span>
+                        )}
+                        <CheckCircle size={14} className="text-rose-600" />
+                      </div>
+                    )}
                   </button>
                 );
               })}
             </div>
+
+            {/* Optional Primary Anchor Selector if 2+ selected */}
+            {selectedProblems.length > 1 && (
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs animate-in fade-in">
+                <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
+                  Identify your #1 single biggest anchor from your selections:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedProblems.map((prob) => {
+                    const isPrimary = (primaryBottleneck || selectedProblems[0]) === prob;
+                    return (
+                      <button
+                        key={prob}
+                        type="button"
+                        onClick={() => setPrimaryBottleneck(prob)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                          isPrimary
+                            ? "bg-rose-600 text-white shadow-xs font-bold"
+                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        {isPrimary ? `★ ${prob}` : prob}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
