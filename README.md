@@ -41,8 +41,8 @@ A production-quality personal operating system that bridges the gap between inte
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd habit-tracker
+git clone https://github.com/Mohitgujjar07/habit--tracker.git
+cd habit--tracker
 
 # Install dependencies
 npm install
