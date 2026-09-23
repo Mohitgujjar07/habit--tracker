@@ -11,6 +11,7 @@ import {
   Command,
   Waves,
   Mic,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -23,6 +24,7 @@ interface HeaderProps {
   onOpenCommandCenter: () => void;
   onOpenUrgeSurfer?: () => void;
   onOpenVoiceCheckin?: () => void;
+  onOpenShieldHub?: () => void;
   isBadDayModeActive?: boolean;
 }
 
@@ -34,6 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCommandCenter,
   onOpenUrgeSurfer,
   onOpenVoiceCheckin,
+  onOpenShieldHub,
   isBadDayModeActive = false,
 }) => {
   return (
@@ -83,6 +86,16 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Mic size={14} className="text-indigo-600" />
           <span className="hidden sm:inline">Voice Debrief</span>
+        </button>
+
+        {/* APP SHIELD (Android & iOS Interception Hub) */}
+        <button
+          onClick={onOpenShieldHub}
+          className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-xs"
+          title="Cross-platform distraction shield (Native Android APK, iOS Shortcuts, Desktop Extension)"
+        >
+          <Shield size={14} className="text-emerald-600" />
+          <span className="hidden md:inline">App Shield</span>
         </button>
 
         {/* RESIST URGE (Option A: Urge Surfer Dopamine Reset) */}

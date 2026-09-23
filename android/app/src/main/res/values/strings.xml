@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">comeback.mjg</string>
+    <string name="title_activity_main">comeback.mjg</string>
+    <string name="package_name">com.comeback.mjg</string>
+    <string name="custom_url_scheme">com.comeback.mjg</string>
+    <string name="accessibility_service_description">Monitors blacklisted distraction apps (Instagram, YouTube, X) and launches the 90-second comeback.mjg Urge Surfer / Dopamine Reset.</string>
+</resources>

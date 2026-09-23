@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { MobileNav } from "@/components/layout/MobileNav";
@@ -10,6 +10,7 @@ import { ImStuckModal } from "@/components/modals/ImStuckModal";
 import { BadDayModal } from "@/components/modals/BadDayModal";
 import { UrgeSurferModal } from "@/components/modals/UrgeSurferModal";
 import { VoiceCheckinModal } from "@/components/modals/VoiceCheckinModal";
+import { ShieldHubModal } from "@/components/modals/ShieldHubModal";
 import { AICoachDrawer } from "@/components/drawers/AICoachDrawer";
 
 interface AppShellProps {
@@ -23,9 +24,31 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const [isStuckOpen, setIsStuckOpen] = useState(false);
   const [isUrgeOpen, setIsUrgeOpen] = useState(false);
   const [isVoiceCheckinOpen, setIsVoiceCheckinOpen] = useState(false);
+  const [isShieldHubOpen, setIsShieldHubOpen] = useState(false);
+  const [interceptedApp, setInterceptedApp] = useState<string | undefined>(undefined);
   const [isBadDayOpen, setIsBadDayOpen] = useState(false);
   const [isBadDayActive, setIsBadDayActive] = useState(false);
   const [isAICoachOpen, setIsAICoachOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get("mode");
+      const appParam = params.get("app");
+      if (mode === "urge_surf" || mode === "lockdown") {
+        setInterceptedApp(appParam || "Distraction");
+        setIsUrgeOpen(true);
+      }
+
+      const handleNativeInterception = (e: any) => {
+        const detailApp = e?.detail?.app || "Distraction";
+        setInterceptedApp(detailApp);
+        setIsUrgeOpen(true);
+      };
+      window.addEventListener("lockdown-interception", handleNativeInterception);
+      return () => window.removeEventListener("lockdown-interception", handleNativeInterception);
+    }
+  }, []);
 
   const handleCommandSelect = (actionKey: string) => {
     setIsCommandOpen(false);
@@ -56,6 +79,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       setIsVoiceCheckinOpen(true);
     } else if (actionKey === "urge_surfer") {
       setIsUrgeOpen(true);
+    } else if (actionKey === "shield_hub") {
+      setIsShieldHubOpen(true);
     } else if (actionKey === "stuck") {
       setIsStuckOpen(true);
     } else if (actionKey === "bad_day") {
@@ -82,6 +107,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           onOpenStuckModal={() => setIsStuckOpen(true)}
           onOpenUrgeSurfer={() => setIsUrgeOpen(true)}
           onOpenVoiceCheckin={() => setIsVoiceCheckinOpen(true)}
+          onOpenShieldHub={() => setIsShieldHubOpen(true)}
           onOpenBadDayMode={() => setIsBadDayOpen(true)}
           onOpenQuickAction={() => {
             setQuickActionTab("task");
@@ -119,7 +145,21 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
       <UrgeSurferModal
         isOpen={isUrgeOpen}
-        onClose={() => setIsUrgeOpen(false)}
+        onClose={() => {
+          setIsUrgeOpen(false);
+          setInterceptedApp(undefined);
+        }}
+        initialApp={interceptedApp}
+        autoStartTimer={!!interceptedApp}
+      />
+
+      <ShieldHubModal
+        isOpen={isShieldHubOpen}
+        onClose={() => setIsShieldHubOpen(false)}
+        onTestInterception={(appName) => {
+          setInterceptedApp(appName);
+          setIsUrgeOpen(true);
+        }}
       />
 
       <VoiceCheckinModal

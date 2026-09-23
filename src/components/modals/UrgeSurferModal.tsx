@@ -27,6 +27,9 @@ import {
 interface UrgeSurferModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialApp?: string;
+  initialTrigger?: TriggerCategory;
+  autoStartTimer?: boolean;
 }
 
 type TriggerCategory = UrgeSurfingLog["triggerCategory"];
@@ -95,6 +98,9 @@ const GROUNDING_MANTRAS = [
 export const UrgeSurferModal: React.FC<UrgeSurferModalProps> = ({
   isOpen,
   onClose,
+  initialApp,
+  initialTrigger,
+  autoStartTimer = false,
 }) => {
   // Step 1: Setup, Step 2: Surfing (90s breath), Step 3: Victory & Replacement
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -123,18 +129,26 @@ export const UrgeSurferModal: React.FC<UrgeSurferModalProps> = ({
   // Reset when modal opens
   useEffect(() => {
     if (isOpen) {
-      setStep(1);
+      if (initialApp || autoStartTimer) {
+        setStep(2);
+        setIsTimerRunning(true);
+        setSelectedTrigger(initialTrigger || "Phone / Social Media");
+        setNotes(initialApp ? `Autonomous Shield Interception: ${initialApp}` : "");
+      } else {
+        setStep(1);
+        setIsTimerRunning(false);
+        if (initialTrigger) setSelectedTrigger(initialTrigger);
+        setNotes("");
+      }
       setTimerSeconds(90);
       setTotalDuration(90);
-      setIsTimerRunning(false);
       setCycleTime(0);
       setIsSuccessSaved(false);
-      setInitialIntensity(7);
+      setInitialIntensity(8);
       setFinalIntensity(2);
       setCustomAction("");
-      setNotes("");
     }
-  }, [isOpen]);
+  }, [isOpen, initialApp, initialTrigger, autoStartTimer]);
 
   // Timer interval & physiological sigh cycle
   useEffect(() => {
@@ -385,7 +399,23 @@ export const UrgeSurferModal: React.FC<UrgeSurferModalProps> = ({
 
       {/* STEP 2: 90-SECOND PHYSIOLOGICAL SIGH & WAVE SURFER */}
       {step === 2 && (
-        <div className="space-y-6 text-center py-2">
+        <div className="space-y-5 text-center py-1">
+          {initialApp && (
+            <div className="p-3 rounded-xl bg-orange-50 border border-orange-200/90 text-left flex items-center justify-between shadow-2xs">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded bg-orange-600 text-white font-mono text-[10px] font-black tracking-wider uppercase">
+                  SHIELD ACTIVE
+                </span>
+                <span className="text-xs font-bold text-orange-950">
+                  {initialApp} Intercepted — Reset dopamine with your breath
+                </span>
+              </div>
+              <span className="text-[10px] font-bold text-orange-700 font-mono hidden sm:inline">
+                90s Protocol
+              </span>
+            </div>
+          )}
+
           {/* Top header stats */}
           <div className="flex items-center justify-between text-xs px-2 text-slate-500">
             <span className="font-semibold text-slate-700">

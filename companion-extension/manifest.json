@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "comeback.mjg Focus & Urge Shield",
+  "version": "1.0.0",
+  "description": "Cross-platform distraction interceptor for comeback.mjg. Redirects compulsive dopamine habits into focus and physiological reset.",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "alarms",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.instagram.com/*",
+    "*://*.twitter.com/*",
+    "*://*.x.com/*",
+    "*://*.reddit.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.facebook.com/*",
+    "*://*.netflix.com/*",
+    "*://*.twitch.tv/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "comeback.mjg Shield"
+  }
+}

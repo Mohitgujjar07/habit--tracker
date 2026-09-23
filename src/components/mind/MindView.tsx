@@ -22,10 +22,12 @@ import {
   Moon,
   Calendar,
   Zap,
+  Shield,
 } from "lucide-react";
 import { QuickActionModal } from "@/components/layout/QuickActionModal";
 import { UrgeSurferModal } from "@/components/modals/UrgeSurferModal";
 import { VoiceCheckinModal } from "@/components/modals/VoiceCheckinModal";
+import { ShieldHubModal } from "@/components/modals/ShieldHubModal";
 
 export const MindView: React.FC = () => {
   const [moodLogs, setMoodLogs] = useState<MoodEnergyLog[]>([]);
@@ -36,6 +38,8 @@ export const MindView: React.FC = () => {
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
   const [isUrgeModalOpen, setIsUrgeModalOpen] = useState(false);
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+  const [isShieldModalOpen, setIsShieldModalOpen] = useState(false);
+  const [interceptedApp, setInterceptedApp] = useState<string | undefined>(undefined);
   const [dailyCheckins, setDailyCheckins] = useState<DailyCheckin[]>([]);
   const [quickTab, setQuickTab] = useState("mood");
 
@@ -90,9 +94,20 @@ export const MindView: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2">
           <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setIsShieldModalOpen(true)}
+            className="text-xs gap-1.5 shadow-sm border border-emerald-200 bg-emerald-50/90 text-emerald-950 hover:bg-emerald-100 font-bold"
+          >
+            <Shield size={14} className="text-emerald-600" /> App Shield
+          </Button>
+          <Button
             variant="primary"
             size="sm"
-            onClick={() => setIsUrgeModalOpen(true)}
+            onClick={() => {
+              setInterceptedApp(undefined);
+              setIsUrgeModalOpen(true);
+            }}
             className="text-xs gap-1.5 shadow-sm bg-orange-600 hover:bg-orange-500 font-bold"
           >
             <Waves size={14} /> Resist Urge (90s)
@@ -145,14 +160,28 @@ export const MindView: React.FC = () => {
               </h3>
             </div>
           </div>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => setIsUrgeModalOpen(true)}
-            className="bg-orange-600 hover:bg-orange-500 text-xs font-bold gap-1.5 shadow-xs"
-          >
-            <Waves size={14} /> Launch 90s Protocol
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsShieldModalOpen(true)}
+              className="border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-bold gap-1.5 shadow-2xs"
+            >
+              <Shield size={14} className="text-emerald-600" />
+              <span>Configure Shield</span>
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => {
+                setInterceptedApp(undefined);
+                setIsUrgeModalOpen(true);
+              }}
+              className="bg-orange-600 hover:bg-orange-500 text-xs font-bold gap-1.5 shadow-xs"
+            >
+              <Waves size={14} /> Launch 90s Protocol
+            </Button>
+          </div>
         </div>
 
         {/* Stats Row */}
@@ -459,7 +488,21 @@ export const MindView: React.FC = () => {
 
       <UrgeSurferModal
         isOpen={isUrgeModalOpen}
-        onClose={() => setIsUrgeModalOpen(false)}
+        onClose={() => {
+          setIsUrgeModalOpen(false);
+          setInterceptedApp(undefined);
+        }}
+        initialApp={interceptedApp}
+        autoStartTimer={!!interceptedApp}
+      />
+
+      <ShieldHubModal
+        isOpen={isShieldModalOpen}
+        onClose={() => setIsShieldModalOpen(false)}
+        onTestInterception={(appName) => {
+          setInterceptedApp(appName);
+          setIsUrgeModalOpen(true);
+        }}
       />
 
       <VoiceCheckinModal
