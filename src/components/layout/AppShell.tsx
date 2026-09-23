@@ -8,6 +8,7 @@ import { CommandCenter } from "@/components/layout/CommandCenter";
 import { QuickActionModal } from "@/components/layout/QuickActionModal";
 import { ImStuckModal } from "@/components/modals/ImStuckModal";
 import { BadDayModal } from "@/components/modals/BadDayModal";
+import { UrgeSurferModal } from "@/components/modals/UrgeSurferModal";
 import { AICoachDrawer } from "@/components/drawers/AICoachDrawer";
 
 interface AppShellProps {
@@ -19,6 +20,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
   const [quickActionTab, setQuickActionTab] = useState("task");
   const [isStuckOpen, setIsStuckOpen] = useState(false);
+  const [isUrgeOpen, setIsUrgeOpen] = useState(false);
   const [isBadDayOpen, setIsBadDayOpen] = useState(false);
   const [isBadDayActive, setIsBadDayActive] = useState(false);
   const [isAICoachOpen, setIsAICoachOpen] = useState(false);
@@ -48,6 +50,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     } else if (actionKey === "frustration") {
       setQuickActionTab("frustration");
       setIsQuickActionOpen(true);
+    } else if (actionKey === "urge_surfer") {
+      setIsUrgeOpen(true);
     } else if (actionKey === "stuck") {
       setIsStuckOpen(true);
     } else if (actionKey === "bad_day") {
@@ -72,6 +76,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-6">
         <Header
           onOpenStuckModal={() => setIsStuckOpen(true)}
+          onOpenUrgeSurfer={() => setIsUrgeOpen(true)}
           onOpenBadDayMode={() => setIsBadDayOpen(true)}
           onOpenQuickAction={() => {
             setQuickActionTab("task");
@@ -104,6 +109,12 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         isOpen={isQuickActionOpen}
         onClose={() => setIsQuickActionOpen(false)}
         defaultTab={quickActionTab}
+        onOpenUrgeSurfer={() => setIsUrgeOpen(true)}
+      />
+
+      <UrgeSurferModal
+        isOpen={isUrgeOpen}
+        onClose={() => setIsUrgeOpen(false)}
       />
 
       <ImStuckModal

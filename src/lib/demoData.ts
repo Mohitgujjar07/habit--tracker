@@ -15,6 +15,7 @@ import {
   PersonalOperatingManual,
   TimelineEvent,
   DailyMission,
+  UrgeSurfingLog,
 } from "@/types";
 
 export const createInitialDemoUser = (): UserProfile => ({
@@ -493,5 +494,34 @@ export const initialDemoTimeline: TimelineEvent[] = [
     title: "Completed Authentication Infrastructure",
     description: "All unit tests green, zero post-work guilt.",
     badgeText: "Win",
+  }
+];
+
+export const initialDemoUrgeLogs: UrgeSurfingLog[] = [
+  {
+    id: "urge-demo-1",
+    userId: "user-demo-1",
+    timestamp: new Date(Date.now() - 3600000 * 5).toISOString(),
+    triggerCategory: "Phone / Social Media",
+    intensityInitial: 8,
+    intensityFinal: 2,
+    durationSeconds: 90,
+    replacementActionTaken: "Drank 500ml water and resumed 25m focus sprint",
+    surfedSuccessfully: true,
+    notes: "Felt strong urge to doomscroll Twitter notifications during build. Surfed the physiological sigh.",
+    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+  },
+  {
+    id: "urge-demo-2",
+    userId: "user-demo-1",
+    timestamp: new Date(Date.now() - 86400000 * 2).toISOString(),
+    triggerCategory: "Procrastination",
+    intensityInitial: 7,
+    intensityFinal: 3,
+    durationSeconds: 90,
+    replacementActionTaken: "10 pushups and opened IDE",
+    surfedSuccessfully: true,
+    notes: "Overcame resistance to start hard refactoring work.",
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
   }
 ];

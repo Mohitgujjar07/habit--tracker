@@ -19,6 +19,7 @@ import {
   PersonalOperatingManual,
   TimelineEvent,
   WeeklyReview,
+  UrgeSurfingLog,
 } from "@/types";
 
 import {
@@ -38,6 +39,7 @@ import {
   initialDemoOperatingManual,
   initialDemoExperiments,
   initialDemoTimeline,
+  initialDemoUrgeLogs,
 } from "@/lib/demoData";
 
 const STORAGE_KEYS = {
@@ -61,6 +63,7 @@ const STORAGE_KEYS = {
   OPERATING_MANUAL: "ptos_operating_manual",
   TIMELINE: "ptos_timeline",
   WEEKLY_REVIEWS: "ptos_weekly_reviews",
+  URGE_LOGS: "ptos_urge_logs",
   HAS_SEEDED: "ptos_has_seeded_v1",
 };
 
@@ -116,6 +119,7 @@ export class DataStoreRepository {
     writeStorage(STORAGE_KEYS.OPERATING_MANUAL, initialDemoOperatingManual);
     writeStorage(STORAGE_KEYS.EXPERIMENTS, initialDemoExperiments);
     writeStorage(STORAGE_KEYS.TIMELINE, initialDemoTimeline);
+    writeStorage(STORAGE_KEYS.URGE_LOGS, initialDemoUrgeLogs);
     writeStorage(STORAGE_KEYS.STUCK_LOGS, []);
     writeStorage(STORAGE_KEYS.DISTRACTIONS, []);
     writeStorage(STORAGE_KEYS.FRUSTRATIONS, []);
@@ -437,6 +441,41 @@ export class DataStoreRepository {
     writeStorage(STORAGE_KEYS.WEEKLY_REVIEWS, list);
   }
 
+  // --- URGE SURFING & CRUSHING CRAVINGS ---
+  static getUrgeLogs(): UrgeSurfingLog[] {
+    DataStoreRepository.ensureInitialized();
+    return readStorage<UrgeSurfingLog[]>(STORAGE_KEYS.URGE_LOGS, initialDemoUrgeLogs);
+  }
+
+  static saveUrgeLog(log: UrgeSurfingLog): void {
+    const list = DataStoreRepository.getUrgeLogs();
+    log.id = log.id || `urge-${Date.now()}`;
+    log.createdAt = log.createdAt || new Date().toISOString();
+    log.timestamp = log.timestamp || new Date().toISOString();
+    list.unshift(log);
+    writeStorage(STORAGE_KEYS.URGE_LOGS, list);
+
+    // If successfully surfed, automatically record evidence of ironclad discipline in Identity Evidence and Wins!
+    if (log.surfedSuccessfully) {
+      DataStoreRepository.saveIdentityEvidence({
+        id: `ev-urge-${Date.now()}`,
+        userId: log.userId || "user-demo-1",
+        timestamp: new Date().toISOString(),
+        identityStatement: "I have ironclad self-regulation and overcome compulsive urges.",
+        evidenceAction: `Surfed ${log.triggerCategory} craving (Intensity dropped from ${log.intensityInitial}/10 to ${log.intensityFinal}/10) -> Executed: ${log.replacementActionTaken}`,
+      });
+
+      DataStoreRepository.saveWin({
+        id: `win-urge-${Date.now()}`,
+        userId: log.userId || "user-demo-1",
+        title: `Surfed Craving: ${log.triggerCategory}`,
+        notes: `Resisted impulse for ${log.durationSeconds}s. Channelled dopamine into: ${log.replacementActionTaken}`,
+        category: "breakthrough",
+        createdAt: new Date().toISOString(),
+      });
+    }
+  }
+
   // --- EXPORT ALL ---
   static exportAllData(): Record<string, any> {
     return {
@@ -455,7 +494,9 @@ export class DataStoreRepository {
       experiments: DataStoreRepository.getExperiments(),
       operatingManual: DataStoreRepository.getOperatingManual(),
       timeline: DataStoreRepository.getTimelineEvents(),
+      urgeLogs: DataStoreRepository.getUrgeLogs(),
       exportedAt: new Date().toISOString(),
     };
   }
 }
+

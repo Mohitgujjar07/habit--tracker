@@ -105,3 +105,23 @@ export interface LabResult {
   notes?: string;
   createdAt: string;
 }
+
+export interface UrgeSurfingLog {
+  id: string;
+  userId: string;
+  timestamp: string;
+  triggerCategory:
+    | "Phone / Social Media"
+    | "Procrastination"
+    | "Junk Food / Sugar"
+    | "Nicotine / Vaping"
+    | "Impulsive Shopping"
+    | "Other";
+  intensityInitial: number; // 1 - 10
+  intensityFinal: number; // 1 - 10
+  durationSeconds: number; // e.g. 90 or 180
+  replacementActionTaken: string;
+  surfedSuccessfully: boolean;
+  notes?: string;
+  createdAt: string;
+}

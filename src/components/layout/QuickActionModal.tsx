@@ -12,18 +12,21 @@ import {
   Moon,
   AlertCircle,
   Flame,
+  Waves,
 } from "lucide-react";
 
 interface QuickActionModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultTab?: string;
+  onOpenUrgeSurfer?: () => void;
 }
 
 export const QuickActionModal: React.FC<QuickActionModalProps> = ({
   isOpen,
   onClose,
   defaultTab = "task",
+  onOpenUrgeSurfer,
 }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
 
@@ -445,11 +448,41 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
 
       {/* Distraction Form */}
       {activeTab === "distraction" && (
-        <form onSubmit={handleLogDistraction} className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              What triggered the urge to distract?
-            </label>
+        <div className="space-y-4">
+          {/* Quick link to Urge Surfer protocol */}
+          {onOpenUrgeSurfer && (
+            <div className="p-3.5 rounded-xl bg-orange-50 border border-orange-200/90 flex items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-lg bg-orange-500 text-white shrink-0">
+                  <Waves size={16} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-900">
+                    Active Craving or Impulsive Urge?
+                  </p>
+                  <p className="text-[11px] text-slate-600 font-medium">
+                    Ride the 90s wave with physiological sigh breathing.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenUrgeSurfer();
+                }}
+                className="px-3 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold shrink-0 transition-all shadow-xs"
+              >
+                Surf Urge
+              </button>
+            </div>
+          )}
+
+          <form onSubmit={handleLogDistraction} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                What triggered the urge to distract?
+              </label>
             <div className="grid grid-cols-3 gap-2">
               {["Bored", "Tired", "Stressed", "Avoiding work", "Lonely", "Habit"].map((trig) => (
                 <button
@@ -485,6 +518,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
             </Button>
           </div>
         </form>
+        </div>
       )}
 
       {/* Frustration Form */}

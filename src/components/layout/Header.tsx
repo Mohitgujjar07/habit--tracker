@@ -9,6 +9,7 @@ import {
   Plus,
   Bot,
   Command,
+  Waves,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -19,6 +20,7 @@ interface HeaderProps {
   onOpenQuickAction: () => void;
   onOpenAICoach: () => void;
   onOpenCommandCenter: () => void;
+  onOpenUrgeSurfer?: () => void;
   isBadDayModeActive?: boolean;
 }
 
@@ -28,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenQuickAction,
   onOpenAICoach,
   onOpenCommandCenter,
+  onOpenUrgeSurfer,
   isBadDayModeActive = false,
 }) => {
   return (
@@ -67,8 +70,18 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Right actions: Stuck, Bad Day, AI Coach, Add (NO THEME TOGGLE) */}
+      {/* Right actions: Stuck, Urge Surfer, Bad Day, AI Coach, Add (NO THEME TOGGLE) */}
       <div className="flex items-center gap-2 sm:gap-2.5">
+        {/* RESIST URGE (Option A: Urge Surfer Dopamine Reset) */}
+        <button
+          onClick={onOpenUrgeSurfer}
+          className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-xs"
+          title="90-Second Physiological Sigh protocol to reset dopamine and surf cravings"
+        >
+          <Waves size={14} className="text-orange-500" />
+          <span className="hidden xs:inline sm:inline">Resist Urge</span>
+        </button>
+
         {/* I'M STUCK (Section 30) */}
         <button
           onClick={onOpenStuckModal}
@@ -76,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
           title="Micro 2-minute action generator when experiencing friction or avoidance"
         >
           <LifeBuoy size={14} className="text-rose-500" />
-          <span>I'm Stuck</span>
+          <span className="hidden xs:inline">I'm Stuck</span>
         </button>
 
         {/* BAD DAY MODE (Section 39) */}

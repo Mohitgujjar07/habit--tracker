@@ -17,6 +17,7 @@ import {
   Flame,
   FileText,
   AlertCircle,
+  Waves,
 } from "lucide-react";
 
 interface CommandCenterProps {
@@ -59,6 +60,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
     { id: "log_sleep", title: "Log Sleep & Recovery", icon: Moon, category: "Body", action: () => onSelectAction("log_sleep") },
     { id: "log_workout", title: "Log Workout Session", icon: Dumbbell, category: "Body", action: () => onSelectAction("log_workout") },
     { id: "log_distraction", title: "Capture Distraction Trigger", icon: AlertCircle, category: "Digital", action: () => onSelectAction("distraction") },
+    { id: "urge_surfer", title: "Resist Urge / Dopamine Reset (90s)", icon: Waves, category: "Intervention", action: () => onSelectAction("urge_surfer") },
     { id: "im_stuck", title: "I'm Stuck (2-Min Action)", icon: LifeBuoy, category: "Intervention", action: () => onSelectAction("stuck") },
     { id: "bad_day_mode", title: "Toggle Bad Day Recovery Mode", icon: ShieldAlert, category: "Intervention", action: () => onSelectAction("bad_day") },
     { id: "open_ai_coach", title: "Ask AI Coach", icon: Bot, category: "Intelligence", action: () => onSelectAction("ai_coach") },
