@@ -28,6 +28,13 @@ export interface Milestone {
   completedAt?: string;
 }
 
+export type GoalHorizon =
+  | "30_days"
+  | "90_days"
+  | "6_months"
+  | "1_year"
+  | "north_star";
+
 export interface Goal {
   id: string;
   userId: string;
@@ -36,6 +43,7 @@ export interface Goal {
   why: string;
   category: "BECOME" | "BUILD" | "LEARN" | "IMPROVE" | "STOP" | "START" | "EXPERIENCE";
   priority: PriorityLevel;
+  horizon?: GoalHorizon;
   targetDate: string;
   progressPercent: number;
   status: "active" | "completed" | "archived";

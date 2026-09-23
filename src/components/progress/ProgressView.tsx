@@ -77,12 +77,12 @@ export const ProgressView: React.FC = () => {
   }, []);
 
   const phases = [
-    { num: 1, name: "Foundation & Baseline", days: "Days 1–15", status: "completed" },
-    { num: 2, name: "Digital & Execution Build", days: "Days 16–30", status: "active" },
-    { num: 3, name: "Physical Endurance Build", days: "Days 31–45", status: "upcoming" },
-    { num: 4, name: "Cognitive Load Expansion", days: "Days 46–60", status: "upcoming" },
-    { num: 5, name: "Challenge Zone & Proof", days: "Days 61–75", status: "upcoming" },
-    { num: 6, name: "Mastery & Integration", days: "Days 76–90", status: "upcoming" },
+    { num: 1, name: "30-Day Sprint: Baseline & Habit Loop", days: "Days 1–30", status: "completed", horizon: "30-Day" },
+    { num: 2, name: "90-Day Quarter: MVP & Digital Conditioning", days: "Days 31–90", status: "active", horizon: "90-Day" },
+    { num: 3, name: "6-Month Arc: Deep Leverage & Bio Endurance", days: "Months 3–6", status: "upcoming", horizon: "6-Month" },
+    { num: 4, name: "1-Year Mission: Financial Sovereignty", days: "Months 6–12", status: "upcoming", horizon: "1-Year" },
+    { num: 5, name: "North Star Horizon: Autonomous Life Engine", days: "Years 1–3", status: "upcoming", horizon: "North Star" },
+    { num: 6, name: "Perpetual Mastery: Continuous Elevation", days: "Perpetual", status: "upcoming", horizon: "Perpetual" },
   ];
 
   return (
@@ -148,10 +148,10 @@ export const ProgressView: React.FC = () => {
           <Card className="p-5 flex flex-col justify-between bg-white border-surface-200/80 shadow-sm">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-wider text-amber-600 font-bold block">
-                90-DAY TRANSFORMATION PROGRAM
+                MULTI-HORIZON LIFE ARCHITECTURE
               </span>
-              <div className="font-mono text-2xl font-bold text-foreground mt-2">
-                Phase 2: Digital Build
+              <div className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-2">
+                Horizon II: 90-Day Quarter
               </div>
             </div>
             <p className="text-[11px] text-surface-600 mt-3">
@@ -211,9 +211,17 @@ export const ProgressView: React.FC = () => {
             ))}
           </div>
 
-          {/* 90-Day Phases Roadmap */}
+          {/* Multi-Horizon Phases Roadmap */}
           <Card className="p-5 space-y-4 bg-white border-surface-200/80 shadow-sm">
-            <h3 className="text-sm font-bold text-foreground">90-Day Transformation Roadmap</h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-bold text-foreground">Multi-Horizon Strategic Roadmap</h3>
+                <p className="text-xs text-surface-500">From 30-day tactical sprints to multi-year sovereign North Star.</p>
+              </div>
+              <span className="text-[10px] font-mono font-bold text-orange-600 bg-orange-50 px-2.5 py-0.5 rounded-full border border-orange-200 self-start sm:self-auto">
+                PERPETUAL PROGRESSION
+              </span>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {phases.map((ph) => (
                 <div
@@ -228,7 +236,7 @@ export const ProgressView: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-brand-600">
-                      PHASE {ph.num}
+                      HORIZON {ph.num}
                     </span>
                     <Badge variant={ph.status === "active" ? "brand" : ph.status === "completed" ? "success" : "default"} size="sm">
                       {ph.status}

@@ -82,7 +82,7 @@ export const MOTIVATIONAL_QUOTES: MotivationalQuote[] = [
     text: "It does not matter how slowly you go as long as you do not stop.",
     author: "Confucius",
     category: "small-steps",
-    actionAdvice: "Progress of 1% today compounds into a completely new life in 90 days.",
+    actionAdvice: "Progress of 1% today compounds into an entirely transformed life over time.",
   },
   {
     id: "q-12",

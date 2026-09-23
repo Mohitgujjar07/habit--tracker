@@ -82,13 +82,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* 90-Day Transformation Phase Badge */}
+      {/* Transformation Momentum & Phase Badge */}
       <div className="mt-4 px-3 py-2 rounded-xl bg-orange-50/80 border border-orange-200/70 flex items-center justify-between text-xs">
         <span className="font-mono text-orange-700 text-[11px] font-bold">
-          DAY {profile?.transformationDay || 24} / 90
+          DAY {profile?.transformationDay || 24}
         </span>
-        <span className="text-[11px] font-semibold text-orange-600">
-          Phase 2: Build
+        <span className="text-[10px] font-semibold text-orange-700 truncate max-w-[120px]" title={profile?.transformationPhase || "Active Momentum"}>
+          {profile?.transformationPhase ? profile.transformationPhase.replace("Perpetual Execution • ", "") : "Active Sprint"}
         </span>
       </div>
 

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { DataStoreRepository } from "@/repositories/dataStore";
+import { GoalHorizon } from "@/types";
 import {
   CheckSquare,
   FolderKanban,
@@ -40,6 +41,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
 
   const [goalTitle, setGoalTitle] = useState("");
   const [goalCategory, setGoalCategory] = useState<"BUILD" | "BECOME" | "IMPROVE" | "LEARN">("BUILD");
+  const [goalHorizon, setGoalHorizon] = useState<GoalHorizon>("90_days");
 
   const [moodVal, setMoodVal] = useState(7);
   const [energyVal, setEnergyVal] = useState(7);
@@ -100,18 +102,31 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
   const handleCreateGoal = (e: React.FormEvent) => {
     e.preventDefault();
     if (!goalTitle.trim()) return;
+
+    const daysToAdd =
+      goalHorizon === "30_days" ? 30 :
+      goalHorizon === "90_days" ? 90 :
+      goalHorizon === "6_months" ? 180 :
+      goalHorizon === "1_year" ? 365 : 730;
+
     DataStoreRepository.saveGoal({
       id: `goal-${Date.now()}`,
       userId: "user-demo-1",
       title: goalTitle.trim(),
-      description: "90-day outcome priority",
-      why: "Key driver of personal transformation",
+      description: `${
+        goalHorizon === "30_days" ? "30-day tactical execution sprint" :
+        goalHorizon === "90_days" ? "90-day quarterly milestone" :
+        goalHorizon === "6_months" ? "6-month strategic horizon" :
+        goalHorizon === "1_year" ? "1-year major transformative mission" : "Multi-year North Star anchor"
+      }`,
+      why: "Key driver of personal transformation and long-term sovereignty",
       category: goalCategory,
       priority: "high",
-      targetDate: new Date(Date.now() + 90 * 86400000).toISOString().split("T")[0],
+      horizon: goalHorizon,
+      targetDate: new Date(Date.now() + daysToAdd * 86400000).toISOString().split("T")[0],
       progressPercent: 0,
       status: "active",
-      milestones: ["Define deliverables", "Midpoint review", "Final completion"],
+      milestones: ["Define milestone checkpoints", "Midpoint review", "Final milestone achieved"],
       projectIds: [],
       habitIds: [],
       createdAt: new Date().toISOString(),
@@ -310,8 +325,37 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
       {activeTab === "goal" && (
         <form onSubmit={handleCreateGoal} className="space-y-4">
           <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Strategic Horizon
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {[
+                { id: "30_days", label: "30-Day Sprint", sub: "+30 days" },
+                { id: "90_days", label: "90-Day Quarter", sub: "+90 days" },
+                { id: "6_months", label: "6-Month Horizon", sub: "+6 months" },
+                { id: "1_year", label: "1-Year Mission", sub: "+1 year" },
+                { id: "north_star", label: "North Star (1-3Y)", sub: "+2 years" },
+              ].map((h) => (
+                <button
+                  key={h.id}
+                  type="button"
+                  onClick={() => setGoalHorizon(h.id as GoalHorizon)}
+                  className={`p-2 rounded-xl border text-left transition-colors ${
+                    goalHorizon === h.id
+                      ? "bg-orange-50 border-orange-500 text-orange-600 shadow-xs"
+                      : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="text-xs font-bold leading-tight">{h.label}</div>
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">{h.sub}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
-              90-Day Vision Goal
+              Goal Title / Strategic Objective
             </label>
             <input
               type="text"
@@ -345,7 +389,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
           </div>
           <div className="flex justify-end pt-2">
             <Button type="submit" variant="primary" size="md">
-              Create 90-Day Goal
+              Create Strategic Goal
             </Button>
           </div>
         </form>

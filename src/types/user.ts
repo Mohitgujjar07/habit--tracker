@@ -145,6 +145,8 @@ export interface UserProfile {
   accountabilityStyle: AccountabilityStyle;
 
   // Evolution & metadata
+  northStarVision?: string;
+  transformationPhase?: string;
   onboardingCompleted: boolean;
   onboardingStep: number;
   transformationDay: number; // e.g. 1 to 90

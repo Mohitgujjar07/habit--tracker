@@ -134,7 +134,8 @@ export const OnboardingWizard: React.FC = () => {
   const [studentCourse, setStudentCourse] = useState("Computer Science");
   const [businessIdea, setBusinessIdea] = useState("B2B SaaS Developer Analytics");
 
-  // 90-day Goals
+  // Strategic Multi-Horizon Goals
+  const [northStarVision, setNorthStarVision] = useState("Build a profitable, high-impact venture with complete location and financial autonomy.");
   const [goalBuild, setGoalBuild] = useState("Launch SaaS MVP to first 5 pilots.");
   const [goalBecome, setGoalBecome] = useState("A consistent builder who ships without friction.");
   const [goalStop, setGoalStop] = useState("Passive social media browsing during morning hours.");
@@ -219,6 +220,8 @@ export const OnboardingWizard: React.FC = () => {
       coachStyle,
       dislikedExperiencePatterns: dislikedPatterns,
       accountabilityStyle,
+      northStarVision: northStarVision.trim() || undefined,
+      transformationPhase: "Perpetual Execution • Horizon I",
       onboardingCompleted: true,
       onboardingStep: 10,
       transformationDay: 1,
@@ -227,6 +230,50 @@ export const OnboardingWizard: React.FC = () => {
     };
 
     DataStoreRepository.saveUserProfile(profile);
+
+    // Also populate multi-horizon goals for instant momentum
+    if (goalBuild.trim()) {
+      DataStoreRepository.saveGoal({
+        id: `goal-build-${Date.now()}`,
+        userId: "user-demo-1",
+        title: goalBuild.trim(),
+        description: "Tactical deliverable and execution milestone",
+        why: successDef,
+        category: "BUILD",
+        priority: "critical",
+        horizon: "90_days",
+        targetDate: new Date(Date.now() + 90 * 86400000).toISOString().split("T")[0],
+        progressPercent: 15,
+        status: "active",
+        milestones: ["Phase 1 architecture", "Core build execution", "Public launch / review"],
+        projectIds: [],
+        habitIds: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    if (goalBecome.trim()) {
+      DataStoreRepository.saveGoal({
+        id: `goal-become-${Date.now()}`,
+        userId: "user-demo-1",
+        title: goalBecome.trim(),
+        description: "Identity transformation and cognitive habit conditioning",
+        why: "Identity precedes behavior; behavior precedes outcomes",
+        category: "BECOME",
+        priority: "high",
+        horizon: "30_days",
+        targetDate: new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0],
+        progressPercent: 20,
+        status: "active",
+        milestones: ["First 7 consecutive days", "14-day consistency checkpoint", "Habit automaticity achieved"],
+        projectIds: [],
+        habitIds: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
     router.push("/dashboard");
   };
 
@@ -708,40 +755,68 @@ export const OnboardingWizard: React.FC = () => {
           </div>
         )}
 
-        {/* STEP 9: 90-Day Goals */}
+        {/* STEP 9: Multi-Horizon Goals & North Star */}
         {step === 9 && (
           <div className="space-y-4 animate-in fade-in">
             <div>
-              <h3 className="text-lg font-bold text-foreground">90-Day Vision</h3>
-              <p className="text-xs text-surface-500 mt-1">
-                What do you want to accomplish in the next 90 days?
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-orange-50 text-orange-600 border border-orange-200 mb-1">
+                MULTI-HORIZON LIFE ARCHITECTURE
+              </div>
+              <h3 className="text-lg font-bold text-foreground">Strategic Horizons & North Star</h3>
+              <p className="text-xs text-surface-500 mt-0.5">
+                Break free from arbitrary limits. Connect your long-term life vision to near-term execution sprints.
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-surface-700 mb-1">BUILD: Tangible output or product</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-surface-700">NORTH STAR: 1–3 Year Guiding Life Anchor</label>
+                <span className="text-[10px] font-mono text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded-md">Long-Term</span>
+              </div>
+              <textarea
+                rows={2}
+                value={northStarVision}
+                onChange={(e) => setNorthStarVision(e.target.value)}
+                placeholder="What is your ultimate 1–3 year vision? (e.g. Build a sovereign software venture that yields true financial & creative independence)"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-surface-700">BUILD: 90-Day Tactical Quarter Milestone</label>
+                <span className="text-[10px] font-mono text-orange-600 font-bold bg-orange-50 px-2 py-0.5 rounded-md">90-Day Quarter</span>
+              </div>
               <input
                 type="text"
                 value={goalBuild}
                 onChange={(e) => setGoalBuild(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
+                placeholder="e.g. Launch SaaS MVP to first 5 pilots"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-surface-700 mb-1">BECOME: Identity change</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-surface-700">BECOME: 30-Day Sprint Identity Target</label>
+                <span className="text-[10px] font-mono text-purple-600 font-bold bg-purple-50 px-2 py-0.5 rounded-md">30-Day Sprint</span>
+              </div>
               <input
                 type="text"
                 value={goalBecome}
                 onChange={(e) => setGoalBecome(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
+                placeholder="e.g. A disciplined builder who logs 90min deep work every morning"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-surface-700 mb-1">STOP: Destructive habit to eliminate</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-surface-700">STOP: Destructive Habit to Eliminate</label>
+                <span className="text-[10px] font-mono text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded-md">Friction Shield</span>
+              </div>
               <input
                 type="text"
                 value={goalStop}
                 onChange={(e) => setGoalStop(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground"
+                placeholder="e.g. Passive social media browsing during morning hours"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
           </div>
@@ -753,18 +828,18 @@ export const OnboardingWizard: React.FC = () => {
             <div>
               <h3 className="text-lg font-bold text-foreground">Definition of Success & Tone</h3>
               <p className="text-xs text-surface-500 mt-1">
-                How will you know these 90 days were worth it?
+                How will you know your momentum and life trajectory are compounding?
               </p>
             </div>
             <div>
               <label className="block text-xs font-semibold text-surface-700 mb-1">
-                "If I look back after 90 days, what would make me say: 'These 90 days were worth it'?"
+                "Looking ahead, what milestone or outcome will prove that this personal operating system transformed your life?"
               </label>
               <textarea
                 rows={3}
                 value={successDef}
                 onChange={(e) => setSuccessDef(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-surface-200 bg-surface-50 text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
             <div>

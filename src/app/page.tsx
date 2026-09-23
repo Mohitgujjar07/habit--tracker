@@ -82,7 +82,7 @@ export default function LandingPage() {
             href="/onboarding"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm shadow-lg shadow-orange-500/25 active:scale-98 transition-all"
           >
-            <span>START YOUR 90-DAY JOURNEY</span>
+            <span>START YOUR TRANSFORMATION JOURNEY</span>
             <ArrowRight size={16} />
           </Link>
 

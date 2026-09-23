@@ -138,7 +138,7 @@ export const ProfileView: React.FC = () => {
               </p>
             </div>
           </div>
-          <Badge variant="brand">Day {profile.transformationDay || 24} / 90</Badge>
+          <Badge variant="brand">Day {profile.transformationDay || 24} • Perpetual Momentum</Badge>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
@@ -163,14 +163,25 @@ export const ProfileView: React.FC = () => {
           </div>
         </div>
 
-        {/* 90-Day Definition of Success */}
-        <div className="p-3.5 rounded-xl bg-surface-50 border border-surface-200 text-xs">
-          <span className="font-semibold text-brand-600 block mb-1">
-            Personal Definition of Success
-          </span>
-          <p className="text-surface-700">
-            "{profile.personalDefinitionOfSuccess}"
-          </p>
+        {/* North Star & Strategic Definition of Success */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="p-3.5 rounded-xl bg-orange-50/70 border border-orange-200/80">
+            <span className="font-semibold text-orange-700 block mb-1">
+              North Star Vision (1–3 Years)
+            </span>
+            <p className="text-slate-800 font-medium italic">
+              "{profile.northStarVision || "Build a sovereign, high-impact enterprise that yields complete financial, intellectual, and location independence."}"
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-surface-50 border border-surface-200">
+            <span className="font-semibold text-brand-600 block mb-1">
+              Personal Definition of Success
+            </span>
+            <p className="text-surface-700">
+              "{profile.personalDefinitionOfSuccess}"
+            </p>
+          </div>
         </div>
       </Card>
 

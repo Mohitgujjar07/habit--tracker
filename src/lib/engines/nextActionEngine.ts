@@ -19,7 +19,7 @@ export class NextActionEngine {
 
     if (candidateTasks.length === 0) {
       return {
-        title: "Define next 90-day milestone or project task",
+        title: "Define next strategic milestone or project task",
         durationMinutes: 20,
         rationale: "All current tasks are complete. Spend 20 minutes clarifying the next meaningful outcome.",
         urgencyScore: 50,

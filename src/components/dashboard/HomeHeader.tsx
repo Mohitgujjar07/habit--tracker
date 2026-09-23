@@ -23,7 +23,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({ profile }) => {
             {greeting}, {name}
           </h1>
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-orange-50 text-orange-600 border border-orange-200">
-            DAY {day} / 90
+            DAY {day} • MOMENTUM
           </span>
         </div>
         <p className="text-xs text-slate-500 font-medium mt-1">
@@ -37,7 +37,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({ profile }) => {
             Current Phase
           </div>
           <div className="text-xs font-bold text-slate-800">
-            Phase 2: Digital & Execution Build
+            {profile?.transformationPhase || "Phase 2: Digital & Execution Build"}
           </div>
         </div>
       </div>
