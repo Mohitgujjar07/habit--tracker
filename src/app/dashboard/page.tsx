@@ -9,6 +9,7 @@ import { TodaysMissionCard } from "@/components/dashboard/TodaysMissionCard";
 import { TodayGlance } from "@/components/dashboard/TodayGlance";
 import { ProjectMomentumCard } from "@/components/dashboard/ProjectMomentumCard";
 import { PatternsNotice } from "@/components/dashboard/PatternsNotice";
+import { MorningQuoteHero } from "@/components/dashboard/MorningQuoteHero";
 import { DeveloperDashboard } from "@/components/specialized/DeveloperDashboard";
 import { CollegeDashboard } from "@/components/specialized/CollegeDashboard";
 import { DataStoreRepository } from "@/repositories/dataStore";
@@ -145,6 +146,9 @@ function DashboardContent() {
       <div className="space-y-6 max-w-6xl mx-auto animate-in fade-in">
         {/* Header with greeting & Day counter */}
         <HomeHeader profile={profile} />
+
+        {/* Daily 6:00 AM Highlighted Motivational Quote */}
+        <MorningQuoteHero />
 
         {/* Observed Pattern Notice */}
         <PatternsNotice patterns={patterns} />

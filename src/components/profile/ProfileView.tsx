@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DataStoreRepository } from "@/repositories/dataStore";
 import { ExportService } from "@/services/exportService";
+import { NotificationService, NotificationSettings } from "@/services/notificationService";
 import { UserProfile } from "@/types";
 import {
   User,
@@ -16,6 +17,11 @@ import {
   Sliders,
   Sparkles,
   Lock,
+  Bell,
+  Check,
+  Smartphone,
+  Sun,
+  Clock,
 } from "lucide-react";
 
 export const ProfileView: React.FC = () => {
@@ -23,10 +29,38 @@ export const ProfileView: React.FC = () => {
   const [allowAI, setAllowAI] = useState(true);
   const [allowHealth, setAllowHealth] = useState(true);
   const [allowJournalAI, setAllowJournalAI] = useState(false);
+  const [notifSettings, setNotifSettings] = useState<NotificationSettings>(() => NotificationService.getSettings());
+  const [notifPermission, setNotifPermission] = useState<NotificationPermission | "unsupported">("default");
+  const [testSent, setTestSent] = useState(false);
 
   useEffect(() => {
     setProfile(DataStoreRepository.getUserProfile());
+    setNotifPermission(NotificationService.getPermission());
   }, []);
+
+  const handleToggleNotifications = async (enabled: boolean) => {
+    if (enabled && NotificationService.isSupported() && Notification.permission !== "granted") {
+      const p = await NotificationService.requestPermission();
+      setNotifPermission(p);
+    }
+    const updated = NotificationService.saveSettings({ enabled });
+    setNotifSettings(updated);
+  };
+
+  const handleTimeChange = (time: string) => {
+    const updated = NotificationService.saveSettings({ time });
+    setNotifSettings(updated);
+  };
+
+  const handleSendTestNotification = async () => {
+    if (NotificationService.isSupported() && Notification.permission !== "granted") {
+      const p = await NotificationService.requestPermission();
+      setNotifPermission(p);
+    }
+    await NotificationService.testNotificationNow();
+    setTestSent(true);
+    setTimeout(() => setTestSent(false), 3500);
+  };
 
   const handleExportJSON = () => {
     ExportService.exportAsJSON();
@@ -137,6 +171,123 @@ export const ProfileView: React.FC = () => {
           <p className="text-surface-700">
             "{profile.personalDefinitionOfSuccess}"
           </p>
+        </div>
+      </Card>
+
+      {/* Morning Motivational Alert Engine (6:00 AM) */}
+      <Card className="p-6 space-y-4 bg-white border-orange-200/90 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-surface-200">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-orange-100 text-orange-600">
+              <Sun size={20} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-foreground">
+                  Daily Morning Motivational Alert
+                </h3>
+                <Badge variant={notifSettings.enabled ? "brand" : "default"} size="sm">
+                  {notifSettings.enabled ? "Active" : "Disabled"}
+                </Badge>
+              </div>
+              <p className="text-xs text-surface-500 mt-0.5">
+                Delivers your morning motivational quote & focus anchor on top of your mobile device.
+              </p>
+            </div>
+          </div>
+
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={notifSettings.enabled}
+              onChange={(e) => handleToggleNotifications(e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+          </label>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-1">
+          {/* Time Picker */}
+          <div className="p-3 rounded-xl bg-orange-50/50 border border-orange-200/80 space-y-1.5">
+            <label className="font-bold text-slate-800 flex items-center gap-1.5">
+              <Clock size={14} className="text-orange-600" />
+              <span>Morning Alert Time</span>
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="time"
+                value={notifSettings.time}
+                onChange={(e) => handleTimeChange(e.target.value)}
+                className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500 text-xs"
+              />
+              <span className="text-[11px] text-slate-500">
+                Default: 06:00 AM daily
+              </span>
+            </div>
+          </div>
+
+          {/* Device Push Status */}
+          <div className="p-3 rounded-xl bg-surface-50 border border-surface-200 space-y-1.5">
+            <div className="font-bold text-slate-800 flex items-center gap-1.5">
+              <Smartphone size={14} className="text-slate-600" />
+              <span>Mobile Notification Status</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span
+                className={`font-semibold text-xs px-2 py-0.5 rounded-md ${
+                  notifPermission === "granted"
+                    ? "bg-emerald-100 text-emerald-700"
+                    : notifPermission === "denied"
+                    ? "bg-rose-100 text-rose-700"
+                    : "bg-amber-100 text-amber-700"
+                }`}
+              >
+                {notifPermission === "granted"
+                  ? "Permission Granted ✓"
+                  : notifPermission === "denied"
+                  ? "Blocked in Browser"
+                  : "Tap Test to Enable"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Instant Test Action Banner */}
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+          <div>
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <Bell size={14} className="text-orange-500" />
+              <span>Test Morning Alert on Your Device</span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Instantly sends today's highlighted quote so you can see how it appears on top of your screen.
+            </p>
+          </div>
+
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleSendTestNotification}
+            className="gap-1.5 shrink-0 shadow-sm"
+          >
+            {testSent ? (
+              <>
+                <Check size={14} />
+                <span>Alert Sent!</span>
+              </>
+            ) : (
+              <>
+                <Bell size={14} />
+                <span>Send Test Alert Now</span>
+              </>
+            )}
+          </Button>
+        </div>
+
+        {/* PWA Tip */}
+        <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80 text-[11px] text-slate-500">
+          💡 <strong>Pro Tip for Mobile:</strong> To receive notifications like a native app, open this page in Chrome or Safari on your phone, tap <strong>Share</strong> (or the browser menu) and select <strong>"Add to Home Screen"</strong>.
         </div>
       </Card>
 
