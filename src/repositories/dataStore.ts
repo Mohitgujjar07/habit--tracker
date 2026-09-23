@@ -20,6 +20,7 @@ import {
   TimelineEvent,
   WeeklyReview,
   UrgeSurfingLog,
+  DailyCheckin,
 } from "@/types";
 
 import {
@@ -64,6 +65,7 @@ const STORAGE_KEYS = {
   TIMELINE: "ptos_timeline",
   WEEKLY_REVIEWS: "ptos_weekly_reviews",
   URGE_LOGS: "ptos_urge_logs",
+  DAILY_CHECKINS: "ptos_daily_checkins",
   HAS_SEEDED: "ptos_has_seeded_v1",
 };
 
@@ -120,6 +122,7 @@ export class DataStoreRepository {
     writeStorage(STORAGE_KEYS.EXPERIMENTS, initialDemoExperiments);
     writeStorage(STORAGE_KEYS.TIMELINE, initialDemoTimeline);
     writeStorage(STORAGE_KEYS.URGE_LOGS, initialDemoUrgeLogs);
+    writeStorage(STORAGE_KEYS.DAILY_CHECKINS, []);
     writeStorage(STORAGE_KEYS.STUCK_LOGS, []);
     writeStorage(STORAGE_KEYS.DISTRACTIONS, []);
     writeStorage(STORAGE_KEYS.FRUSTRATIONS, []);
@@ -476,6 +479,60 @@ export class DataStoreRepository {
     }
   }
 
+  // --- DAILY CHECKINS & VOICE DEBRIEFS ---
+  static getDailyCheckins(): DailyCheckin[] {
+    DataStoreRepository.ensureInitialized();
+    return readStorage<DailyCheckin[]>(STORAGE_KEYS.DAILY_CHECKINS, []);
+  }
+
+  static saveDailyCheckin(checkin: DailyCheckin): void {
+    const list = DataStoreRepository.getDailyCheckins();
+    checkin.id = checkin.id || `chk-${Date.now()}`;
+    checkin.createdAt = checkin.createdAt || new Date().toISOString();
+    list.unshift(checkin);
+    writeStorage(STORAGE_KEYS.DAILY_CHECKINS, list);
+
+    // If there is an extracted win, save it automatically
+    if (checkin.extractedWin) {
+      DataStoreRepository.saveWin({
+        id: `win-chk-${Date.now()}`,
+        userId: checkin.userId || "user-demo-1",
+        title: checkin.extractedWin,
+        notes: `Recorded during ${checkin.type} debrief.`,
+        category: "comeback",
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    // If there is a tomorrow priority action, automatically create/prepend it as a priority task
+    if (checkin.tomorrowPriorityAction) {
+      DataStoreRepository.saveTask({
+        id: `task-chk-${Date.now()}`,
+        userId: checkin.userId || "user-demo-1",
+        title: checkin.tomorrowPriorityAction,
+        priority: "critical",
+        status: "today",
+        estimatedMinutes: 45,
+        actualMinutesSpent: 0,
+        energyRequirement: "high",
+        contextTag: "Deep Work",
+        postponedCount: 0,
+        tags: ["evening-debrief", "priority"],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    // Record evidence of self-accountability
+    DataStoreRepository.saveIdentityEvidence({
+      id: `ev-chk-${Date.now()}`,
+      userId: checkin.userId || "user-demo-1",
+      timestamp: new Date().toISOString(),
+      identityStatement: "I close my days with conscious reflection and crystal clarity.",
+      evidenceAction: `Completed ${checkin.type} debrief. Priority locked: ${checkin.tomorrowPriorityAction || "Day closed intentionally."}`,
+    });
+  }
+
   // --- EXPORT ALL ---
   static exportAllData(): Record<string, any> {
     return {
@@ -495,8 +552,10 @@ export class DataStoreRepository {
       operatingManual: DataStoreRepository.getOperatingManual(),
       timeline: DataStoreRepository.getTimelineEvents(),
       urgeLogs: DataStoreRepository.getUrgeLogs(),
+      dailyCheckins: DataStoreRepository.getDailyCheckins(),
       exportedAt: new Date().toISOString(),
     };
   }
 }
+
 

@@ -10,11 +10,13 @@ import { TodayGlance } from "@/components/dashboard/TodayGlance";
 import { ProjectMomentumCard } from "@/components/dashboard/ProjectMomentumCard";
 import { PatternsNotice } from "@/components/dashboard/PatternsNotice";
 import { MorningQuoteHero } from "@/components/dashboard/MorningQuoteHero";
+import { SlumpGuardBanner } from "@/components/dashboard/SlumpGuardBanner";
 import { DeveloperDashboard } from "@/components/specialized/DeveloperDashboard";
 import { CollegeDashboard } from "@/components/specialized/CollegeDashboard";
 import { DataStoreRepository } from "@/repositories/dataStore";
 import { NextActionEngine } from "@/lib/engines/nextActionEngine";
 import { PatternEngine, DetectedPattern } from "@/lib/engines/patternEngine";
+import { SlumpEngine } from "@/lib/engines/slumpEngine";
 import {
   UserProfile,
   Task,
@@ -27,6 +29,7 @@ import {
   MoodEnergyLog,
   WorkoutSession,
   DigitalBalanceLog,
+  SlumpRiskAssessment,
 } from "@/types";
 
 function DashboardContent() {
@@ -40,6 +43,7 @@ function DashboardContent() {
   const [mission, setMission] = useState<DailyMission | null>(null);
   const [nextAction, setNextAction] = useState<NextActionRecommendation | null>(null);
   const [patterns, setPatterns] = useState<DetectedPattern[]>([]);
+  const [slumpAssessment, setSlumpAssessment] = useState<SlumpRiskAssessment | null>(null);
   const [sleepLogs, setSleepLogs] = useState<SleepLog[]>([]);
   const [moodLogs, setMoodLogs] = useState<MoodEnergyLog[]>([]);
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
@@ -83,6 +87,16 @@ function DashboardContent() {
       profile: p,
     });
     setPatterns(pat);
+
+    // Compute predictive slump & burnout assessment (Option B)
+    const slump = SlumpEngine.evaluateRisk({
+      sleepLogs: s,
+      moodLogs: md,
+      tasks: t,
+      focusSessions: f,
+      dailyMission: m,
+    });
+    setSlumpAssessment(slump);
   };
 
   useEffect(() => {
@@ -119,6 +133,27 @@ function DashboardContent() {
     setMission(updated);
   };
 
+  const handleActivateRestDay = () => {
+    if (mission) {
+      const compressed: DailyMission = {
+        ...mission,
+        priorityTasks: mission.priorityTasks.slice(0, 1),
+        focusTargetMinutes: 20,
+        movementSuggestion: "Gentle 15-minute nature walk & hydration",
+        recoveryAlternative: "Early bedtime at 22:00. No screens 1h before bed.",
+      };
+      DataStoreRepository.saveDailyMission(compressed);
+      setMission(compressed);
+    }
+    DataStoreRepository.saveIdentityEvidence({
+      id: `ev-rest-${Date.now()}`,
+      userId: profile?.id || "user-demo-1",
+      timestamp: new Date().toISOString(),
+      identityStatement: "I know when to protect my biological baseline to stay in the game for the long run.",
+      evidenceAction: "Activated intentional Low-Power Rest Day protocol to prevent cognitive burnout.",
+    });
+  };
+
   // If specialized mode requested in query string
   if (mode === "developer") {
     return (
@@ -149,6 +184,12 @@ function DashboardContent() {
 
         {/* Daily 6:00 AM Highlighted Motivational Quote */}
         <MorningQuoteHero />
+
+        {/* Predictive Slump & Burnout Guard Banner (Option B) */}
+        <SlumpGuardBanner
+          assessment={slumpAssessment}
+          onActivateRestDay={handleActivateRestDay}
+        />
 
         {/* Observed Pattern Notice */}
         <PatternsNotice patterns={patterns} />

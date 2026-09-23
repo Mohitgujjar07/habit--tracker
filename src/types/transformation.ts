@@ -49,7 +49,21 @@ export interface DailyCheckin {
   completedSummary?: string;
   avoidedSummary?: string;
   proudMoment?: string;
+  audioTranscript?: string;
+  tomorrowPriorityAction?: string;
+  bedtimeIntention?: string;
+  extractedWin?: string;
+  sentimentScore?: number;
   createdAt: string;
+}
+
+export interface SlumpRiskAssessment {
+  riskScore: number; // 0 - 100%
+  riskLevel: "low" | "moderate" | "high";
+  contributingFactors: string[];
+  recommendedProtocol: "maintain" | "light_load" | "rest_day";
+  summary: string;
+  calculatedAt: string;
 }
 
 export interface FrustrationLog {

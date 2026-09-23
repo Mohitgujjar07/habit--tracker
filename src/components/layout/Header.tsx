@@ -10,6 +10,7 @@ import {
   Bot,
   Command,
   Waves,
+  Mic,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -21,6 +22,7 @@ interface HeaderProps {
   onOpenAICoach: () => void;
   onOpenCommandCenter: () => void;
   onOpenUrgeSurfer?: () => void;
+  onOpenVoiceCheckin?: () => void;
   isBadDayModeActive?: boolean;
 }
 
@@ -31,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAICoach,
   onOpenCommandCenter,
   onOpenUrgeSurfer,
+  onOpenVoiceCheckin,
   isBadDayModeActive = false,
 }) => {
   return (
@@ -70,8 +73,18 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Right actions: Stuck, Urge Surfer, Bad Day, AI Coach, Add (NO THEME TOGGLE) */}
+      {/* Right actions: Voice Debrief, Urge Surfer, Stuck, Bad Day, AI Coach, Add */}
       <div className="flex items-center gap-2 sm:gap-2.5">
+        {/* VOICE DEBRIEF (Option C: 60-Second Audio Check-in) */}
+        <button
+          onClick={onOpenVoiceCheckin}
+          className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all flex items-center gap-1.5 active:scale-95 shadow-xs"
+          title="60-Second Evening Voice Memo check-in with AI win extraction"
+        >
+          <Mic size={14} className="text-indigo-600" />
+          <span className="hidden sm:inline">Voice Debrief</span>
+        </button>
+
         {/* RESIST URGE (Option A: Urge Surfer Dopamine Reset) */}
         <button
           onClick={onOpenUrgeSurfer}

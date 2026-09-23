@@ -18,6 +18,7 @@ import {
   FileText,
   AlertCircle,
   Waves,
+  Mic,
 } from "lucide-react";
 
 interface CommandCenterProps {
@@ -64,6 +65,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
     { id: "im_stuck", title: "I'm Stuck (2-Min Action)", icon: LifeBuoy, category: "Intervention", action: () => onSelectAction("stuck") },
     { id: "bad_day_mode", title: "Toggle Bad Day Recovery Mode", icon: ShieldAlert, category: "Intervention", action: () => onSelectAction("bad_day") },
     { id: "open_ai_coach", title: "Ask AI Coach", icon: Bot, category: "Intelligence", action: () => onSelectAction("ai_coach") },
+    { id: "voice_checkin", title: "Evening Voice Debrief (60s)", icon: Mic, category: "Reflection", action: () => onSelectAction("voice_checkin") },
     { id: "frustration_log", title: "Log Frustration & Resistance", icon: Flame, category: "Reflection", action: () => onSelectAction("frustration") },
     { id: "view_progress", title: "View Transformation Analytics", icon: FileText, category: "Analytics", action: () => router.push("/progress") },
   ];

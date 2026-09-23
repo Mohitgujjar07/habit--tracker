@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DataStoreRepository } from "@/repositories/dataStore";
-import { MoodEnergyLog, FrustrationLog, Lesson, IdentityEvidence, UrgeSurfingLog } from "@/types";
+import { MoodEnergyLog, FrustrationLog, Lesson, IdentityEvidence, UrgeSurfingLog, DailyCheckin } from "@/types";
 import {
   Brain,
   Smile,
@@ -18,9 +18,14 @@ import {
   Waves,
   ArrowDownRight,
   Sparkles,
+  Mic,
+  Moon,
+  Calendar,
+  Zap,
 } from "lucide-react";
 import { QuickActionModal } from "@/components/layout/QuickActionModal";
 import { UrgeSurferModal } from "@/components/modals/UrgeSurferModal";
+import { VoiceCheckinModal } from "@/components/modals/VoiceCheckinModal";
 
 export const MindView: React.FC = () => {
   const [moodLogs, setMoodLogs] = useState<MoodEnergyLog[]>([]);
@@ -30,6 +35,8 @@ export const MindView: React.FC = () => {
   const [urgeLogs, setUrgeLogs] = useState<UrgeSurfingLog[]>([]);
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
   const [isUrgeModalOpen, setIsUrgeModalOpen] = useState(false);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+  const [dailyCheckins, setDailyCheckins] = useState<DailyCheckin[]>([]);
   const [quickTab, setQuickTab] = useState("mood");
 
   const loadData = () => {
@@ -38,6 +45,7 @@ export const MindView: React.FC = () => {
     setLessons(DataStoreRepository.getLessons());
     setEvidenceList(DataStoreRepository.getIdentityEvidence());
     setUrgeLogs(DataStoreRepository.getUrgeLogs());
+    setDailyCheckins(DataStoreRepository.getDailyCheckins());
   };
 
   useEffect(() => {
@@ -88,6 +96,14 @@ export const MindView: React.FC = () => {
             className="text-xs gap-1.5 shadow-sm bg-orange-600 hover:bg-orange-500 font-bold"
           >
             <Waves size={14} /> Resist Urge (90s)
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setIsVoiceModalOpen(true)}
+            className="text-xs gap-1.5 shadow-sm border border-orange-200 bg-orange-50/90 text-orange-950 hover:bg-orange-100 font-bold"
+          >
+            <Mic size={14} className="text-orange-600" /> Voice Debrief (60s)
           </Button>
           <Button
             variant="secondary"
@@ -203,6 +219,124 @@ export const MindView: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+      </Card>
+
+      {/* OPTION C: VOICE CHECK-IN & EVENING DEBRIEF */}
+      <Card className="p-5 space-y-4 bg-gradient-to-br from-slate-50 via-white to-orange-50/30 border border-slate-200/90 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-orange-600 text-white shadow-xs">
+              <Mic size={20} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-orange-600 font-bold">
+                  OPTION C • CONTEXT-AWARE VOICE DEBRIEF
+                </span>
+                <Badge variant="brand" size="sm">
+                  {dailyCheckins.length} Debriefs Logged
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">
+                60-Second Evening Audio Download
+              </h3>
+            </div>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setIsVoiceModalOpen(true)}
+            className="bg-orange-600 hover:bg-orange-500 text-xs font-bold gap-1.5 shadow-xs"
+          >
+            <Mic size={14} /> Start Voice Debrief
+          </Button>
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+            <span className="text-[11px] font-semibold text-slate-500 block">Total Check-ins</span>
+            <span className="text-2xl font-black text-slate-900 font-mono mt-0.5 block">
+              {dailyCheckins.length}
+            </span>
+            <span className="text-[10px] text-orange-600 font-bold flex items-center gap-1 mt-0.5">
+              <Zap size={12} /> Auto-Sync to Tomorrow
+            </span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+            <span className="text-[11px] font-semibold text-slate-500 block">Avg Sentiment Level</span>
+            <span className="text-2xl font-black text-emerald-600 font-mono mt-0.5 block">
+              {dailyCheckins.length
+                ? (
+                    dailyCheckins.reduce((acc, c) => acc + (c.sentimentScore || 8), 0) /
+                    dailyCheckins.length
+                  ).toFixed(1)
+                : "8.5"}{" "}
+              <span className="text-xs text-slate-400 font-normal">/ 10</span>
+            </span>
+            <span className="text-[10px] text-slate-500 font-medium mt-0.5 block">
+              Calculated from speech analysis
+            </span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+            <span className="text-[11px] font-semibold text-slate-500 block">Bedtime Target</span>
+            <span className="text-base font-bold text-slate-900 font-mono mt-1 block">
+              {dailyCheckins[0]?.bedtimeIntention || "22:30 PM (Default)"}
+            </span>
+            <span className="text-[10px] text-slate-500 font-medium mt-0.5 flex items-center gap-1">
+              <Moon size={11} className="text-indigo-500" /> Circadian Rhythm Protection
+            </span>
+          </div>
+        </div>
+
+        {/* Recent Debriefs */}
+        <div className="space-y-2 pt-1">
+          <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">
+            Recent Voice Debriefs & Actions Locked
+          </span>
+          {dailyCheckins.length === 0 ? (
+            <div className="p-4 rounded-xl border border-dashed border-slate-200 text-center bg-slate-50/50">
+              <p className="text-xs text-slate-500">
+                No voice debriefs recorded yet. Take 60 seconds tonight to speak freely. The engine will extract your key win, calibrate your energy, and set tomorrow's top priority automatically.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              {dailyCheckins.slice(0, 4).map((chk) => (
+                <div
+                  key={chk.id}
+                  className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-2"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                      <Calendar size={13} className="text-slate-400" />
+                      {chk.date} ({chk.type.toUpperCase()})
+                    </span>
+                    <Badge variant="brand" size="sm">
+                      Sentiment: {chk.sentimentScore || 8}/10
+                    </Badge>
+                  </div>
+                  {chk.audioTranscript && (
+                    <p className="text-xs text-slate-600 line-clamp-2 bg-slate-50 p-2 rounded-lg border border-slate-100 italic">
+                      "{chk.audioTranscript}"
+                    </p>
+                  )}
+                  {chk.tomorrowPriorityAction && (
+                    <div className="text-xs text-orange-950 font-semibold bg-orange-50/90 border border-orange-200/80 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5">
+                      <Zap size={13} className="text-orange-600 shrink-0" />
+                      <span>Tomorrow Priority: {chk.tomorrowPriorityAction}</span>
+                    </div>
+                  )}
+                  {chk.extractedWin && (
+                    <p className="text-[11px] text-emerald-700 font-medium">
+                      <strong>Extracted Win:</strong> {chk.extractedWin}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </Card>
 
@@ -326,6 +460,11 @@ export const MindView: React.FC = () => {
       <UrgeSurferModal
         isOpen={isUrgeModalOpen}
         onClose={() => setIsUrgeModalOpen(false)}
+      />
+
+      <VoiceCheckinModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => setIsVoiceModalOpen(false)}
       />
     </div>
   );

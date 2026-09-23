@@ -9,6 +9,7 @@ import { QuickActionModal } from "@/components/layout/QuickActionModal";
 import { ImStuckModal } from "@/components/modals/ImStuckModal";
 import { BadDayModal } from "@/components/modals/BadDayModal";
 import { UrgeSurferModal } from "@/components/modals/UrgeSurferModal";
+import { VoiceCheckinModal } from "@/components/modals/VoiceCheckinModal";
 import { AICoachDrawer } from "@/components/drawers/AICoachDrawer";
 
 interface AppShellProps {
@@ -21,6 +22,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const [quickActionTab, setQuickActionTab] = useState("task");
   const [isStuckOpen, setIsStuckOpen] = useState(false);
   const [isUrgeOpen, setIsUrgeOpen] = useState(false);
+  const [isVoiceCheckinOpen, setIsVoiceCheckinOpen] = useState(false);
   const [isBadDayOpen, setIsBadDayOpen] = useState(false);
   const [isBadDayActive, setIsBadDayActive] = useState(false);
   const [isAICoachOpen, setIsAICoachOpen] = useState(false);
@@ -50,6 +52,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     } else if (actionKey === "frustration") {
       setQuickActionTab("frustration");
       setIsQuickActionOpen(true);
+    } else if (actionKey === "voice_checkin") {
+      setIsVoiceCheckinOpen(true);
     } else if (actionKey === "urge_surfer") {
       setIsUrgeOpen(true);
     } else if (actionKey === "stuck") {
@@ -77,6 +81,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         <Header
           onOpenStuckModal={() => setIsStuckOpen(true)}
           onOpenUrgeSurfer={() => setIsUrgeOpen(true)}
+          onOpenVoiceCheckin={() => setIsVoiceCheckinOpen(true)}
           onOpenBadDayMode={() => setIsBadDayOpen(true)}
           onOpenQuickAction={() => {
             setQuickActionTab("task");
@@ -115,6 +120,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       <UrgeSurferModal
         isOpen={isUrgeOpen}
         onClose={() => setIsUrgeOpen(false)}
+      />
+
+      <VoiceCheckinModal
+        isOpen={isVoiceCheckinOpen}
+        onClose={() => setIsVoiceCheckinOpen(false)}
       />
 
       <ImStuckModal
