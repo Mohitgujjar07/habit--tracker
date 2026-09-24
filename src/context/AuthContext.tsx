@@ -5,12 +5,20 @@ import { User } from "firebase/auth";
 import { AuthService } from "@/lib/firebase/authService";
 import { CloudSyncService, CloudSyncStatus } from "@/services/cloudSyncService";
 
+export interface AuthErrorState {
+  code: string;
+  message: string;
+}
+
 interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
   syncStatus: CloudSyncStatus;
   lastSyncedAt: Date | null;
+  authError: AuthErrorState | null;
   signInWithGoogle: () => Promise<void>;
+  signInWithDemo: (name?: string, email?: string) => void;
+  clearAuthError: () => void;
   signOut: () => Promise<void>;
   forceSyncNow: () => Promise<void>;
 }
@@ -22,6 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [syncStatus, setSyncStatus] = useState<CloudSyncStatus>("idle");
   const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
+  const [authError, setAuthError] = useState<AuthErrorState | null>(null);
 
   useEffect(() => {
     // 1. Check redirect login result if any
@@ -79,16 +88,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signInWithGoogle = async () => {
     try {
       setIsLoading(true);
+      setAuthError(null);
       const signedInUser = await AuthService.signInWithGoogle();
       if (signedInUser) {
         setUser(signedInUser);
         await CloudSyncService.downloadCloudDataToLocal(signedInUser.uid);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Google sign-in error:", error);
+      const errorCode = error?.code || "unknown";
+      let errorMsg = error?.message || "Sign-in failed. Please check your network connection.";
+
+      if (
+        errorCode === "auth/configuration-not-found" ||
+        errorCode === "auth/operation-not-allowed" ||
+        String(errorMsg).includes("CONFIGURATION_NOT_FOUND") ||
+        String(errorMsg).includes("operation-not-allowed")
+      ) {
+        errorMsg = "Google Sign-In needs to be enabled once in Firebase Console.";
+      } else if (errorCode === "auth/popup-blocked") {
+        errorMsg = "Browser popup was blocked. Please allow popups for this site.";
+      } else if (errorCode === "auth/popup-closed-by-user") {
+        errorMsg = "Sign-in popup was closed before completing.";
+      }
+
+      setAuthError({ code: errorCode, message: errorMsg });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const signInWithDemo = (name = "Mohit", email = "mohit@comeback.mjg") => {
+    const demoUid = "user-local-" + Math.abs(email.split("").reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0));
+    const mockUser: any = {
+      uid: demoUid,
+      displayName: name,
+      email: email,
+      photoURL: null,
+    };
+    setUser(mockUser);
+    setAuthError(null);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("ptos_active_account_uid", demoUid);
+    }
+  };
+
+  const clearAuthError = () => {
+    setAuthError(null);
   };
 
   const signOut = async () => {
@@ -97,6 +143,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await AuthService.signOut();
       setUser(null);
       setSyncStatus("idle");
+      setAuthError(null);
       if (typeof window !== "undefined") {
         window.localStorage.removeItem("ptos_active_account_uid");
       }
@@ -119,7 +166,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         syncStatus,
         lastSyncedAt,
+        authError,
         signInWithGoogle,
+        signInWithDemo,
+        clearAuthError,
         signOut,
         forceSyncNow,
       }}
