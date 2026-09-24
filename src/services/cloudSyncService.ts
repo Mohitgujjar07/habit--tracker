@@ -124,10 +124,28 @@ export class CloudSyncService {
       const storeColRef = collection(db as any, "users", userId, "store");
       const snapshot = await getDocs(storeColRef);
 
+      const ACTIVE_UID_KEY = "ptos_active_account_uid";
+      const previousActiveUid = window.localStorage.getItem(ACTIVE_UID_KEY);
+      const isAccountSwitched = previousActiveUid && previousActiveUid !== userId;
+
       if (snapshot.empty) {
-        // If brand new user with no cloud data yet, backfill cloud with initial local data
+        // If an existing user on this machine was switched out, clear local cache for the new user
+        if (isAccountSwitched) {
+          for (const key of SYNC_COLLECTIONS) {
+            window.localStorage.removeItem(key);
+          }
+        }
+        // Save initial seed to cloud for this new user
         await this.uploadLocalDataToCloud(userId);
+        window.localStorage.setItem(ACTIVE_UID_KEY, userId);
         return true;
+      }
+
+      // If user switched accounts, purge previous user's local entries before restoring
+      if (isAccountSwitched) {
+        for (const key of SYNC_COLLECTIONS) {
+          window.localStorage.removeItem(key);
+        }
       }
 
       let restoredCount = 0;
@@ -139,6 +157,7 @@ export class CloudSyncService {
         }
       });
 
+      window.localStorage.setItem(ACTIVE_UID_KEY, userId);
       this.lastSyncedAt = new Date();
       this.notifyStatusChange("synced");
 

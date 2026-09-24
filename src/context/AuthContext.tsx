@@ -97,6 +97,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await AuthService.signOut();
       setUser(null);
       setSyncStatus("idle");
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem("ptos_active_account_uid");
+      }
     } catch (error) {
       console.error("Sign-out error:", error);
     } finally {
