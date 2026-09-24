@@ -22,9 +22,13 @@ import {
   Smartphone,
   Sun,
   Clock,
+  Cloud,
+  LogOut,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export const ProfileView: React.FC = () => {
+  const { user, syncStatus, signInWithGoogle, signOut, forceSyncNow } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [allowAI, setAllowAI] = useState(true);
   const [allowHealth, setAllowHealth] = useState(true);
@@ -183,6 +187,98 @@ export const ProfileView: React.FC = () => {
             </p>
           </div>
         </div>
+      </Card>
+
+      {/* Google Cloud Sync & Account Security */}
+      <Card className="p-6 space-y-4 bg-white border-slate-200/90 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-surface-200">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-orange-50 text-orange-600 border border-orange-200">
+              <Cloud size={20} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-foreground">
+                  Google Account & Cloud Backup
+                </h3>
+                <Badge variant={user ? "success" : "default"} size="sm">
+                  {user ? "Cloud Synced" : "Local Device Only"}
+                </Badge>
+              </div>
+              <p className="text-xs text-surface-500 mt-0.5">
+                Keep all your goals, habits, and focus logs encrypted and synchronized with your Google account.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            {user ? (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={signOut}
+                className="text-xs text-rose-600 border-rose-200 hover:bg-rose-50 gap-1.5"
+              >
+                <LogOut size={13} />
+                <span>Disconnect</span>
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={signInWithGoogle}
+                className="text-xs gap-1.5"
+              >
+                <span>Connect Google Account</span>
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {user ? (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-orange-200 bg-orange-100 flex items-center justify-center shrink-0">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt={user.displayName || "User"} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="font-bold text-orange-600">
+                    {(user.displayName || user.email || "U").charAt(0).toUpperCase()}
+                  </span>
+                )}
+              </div>
+              <div>
+                <span className="font-bold text-slate-800 block">
+                  {user.displayName || "Google User"}
+                </span>
+                <span className="text-[11px] font-mono text-slate-500 block">
+                  {user.email} • ID: {user.uid.slice(0, 8)}...
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-slate-500 font-mono">
+                Status: {syncStatus}
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={forceSyncNow}
+                className="text-xs gap-1"
+              >
+                <RefreshCw size={12} />
+                <span>Sync Now</span>
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="p-3.5 rounded-xl bg-orange-50/60 border border-orange-200/80 text-xs flex items-center justify-between gap-3">
+            <p className="text-slate-700 leading-relaxed">
+              You are currently using <strong>comeback.mjg</strong> in local-first mode. Sign in with Google to enable automatic background cloud sync between phone, tablet, and PC.
+            </p>
+          </div>
+        )}
       </Card>
 
       {/* Morning Motivational Alert Engine (6:00 AM) */}

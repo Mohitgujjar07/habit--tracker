@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { UserAccountMenu } from "@/components/auth/UserAccountMenu";
 
 interface HeaderProps {
   onOpenStuckModal: () => void;
@@ -153,6 +154,9 @@ export const Header: React.FC<HeaderProps> = ({
           <Plus size={15} />
           <span>Action</span>
         </Button>
+
+        {/* GOOGLE ACCOUNT & CLOUD SYNC MENU */}
+        <UserAccountMenu />
       </div>
     </header>
   );

@@ -25,14 +25,26 @@ import {
   Shield,
   Smartphone,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { UserAccountMenu } from "@/components/auth/UserAccountMenu";
 
 export const OnboardingWizard: React.FC = () => {
   const router = useRouter();
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
 
   // Form State
   const [preferredName, setPreferredName] = useState("Alex");
   const [fullName, setFullName] = useState("");
+
+  useEffect(() => {
+    if (user?.displayName) {
+      const parts = user.displayName.split(" ");
+      setPreferredName(parts[0]);
+      setFullName(user.displayName);
+    }
+  }, [user]);
+
   const [ageRange, setAgeRange] = useState("25–34");
   const [country, setCountry] = useState("United States");
   const [timezone, setTimezone] = useState(
@@ -279,15 +291,19 @@ export const OnboardingWizard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-8">
-      {/* Brand Icon Header */}
-      <div className="flex items-center gap-2.5 mb-6">
-        <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-brand-200">
-          <img src="/logo.png" alt="comeback.mjg" className="w-full h-full object-cover" />
+      {/* Brand Icon Header & Account Sync */}
+      <div className="w-full max-w-2xl flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-brand-200">
+            <img src="/logo.png" alt="comeback.mjg" className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <span className="font-bold text-base tracking-tight text-foreground block leading-tight">comeback.mjg</span>
+            <span className="text-[10px] text-brand-600 font-semibold uppercase tracking-wider block">A Better You. Everyday.</span>
+          </div>
         </div>
-        <div>
-          <span className="font-bold text-base tracking-tight text-foreground block leading-tight">comeback.mjg</span>
-          <span className="text-[10px] text-brand-600 font-semibold uppercase tracking-wider block">A Better You. Everyday.</span>
-        </div>
+
+        <UserAccountMenu />
       </div>
 
       {/* Progress header */}
