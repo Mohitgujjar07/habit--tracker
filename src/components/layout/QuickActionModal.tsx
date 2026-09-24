@@ -5,6 +5,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { DataStoreRepository } from "@/repositories/dataStore";
 import { GoalHorizon } from "@/types";
+import { ExpenseCategory } from "@/types/lifestyle";
 import {
   CheckSquare,
   FolderKanban,
@@ -14,6 +15,9 @@ import {
   AlertCircle,
   Flame,
   Waves,
+  Droplets,
+  Wallet,
+  Plus,
 } from "lucide-react";
 
 interface QuickActionModalProps {
@@ -56,6 +60,38 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
 
   const [frustrationContext, setFrustrationContext] = useState("");
   const [frustrationLevel, setFrustrationLevel] = useState(6);
+
+  // Water & Expense quick-log states
+  const [waterMl, setWaterMl] = useState<number>(250);
+  const [expenseAmt, setExpenseAmt] = useState<string>("");
+  const [expenseCategory, setExpenseCategory] = useState<ExpenseCategory>("Food & Dining");
+  const [expenseDescription, setExpenseDescription] = useState<string>("");
+  const [expenseIsImpulse, setExpenseIsImpulse] = useState<boolean>(false);
+
+  const handleLogWater = (e: React.FormEvent) => {
+    e.preventDefault();
+    DataStoreRepository.addWater(waterMl);
+    onClose();
+  };
+
+  const handleLogExpense = (e: React.FormEvent) => {
+    e.preventDefault();
+    const amt = parseFloat(expenseAmt);
+    if (isNaN(amt) || amt <= 0) return;
+    DataStoreRepository.saveExpenseLog({
+      id: `exp-${Date.now()}`,
+      userId: "user-demo-1",
+      date: new Date().toISOString().split("T")[0],
+      amount: amt,
+      category: expenseCategory,
+      description: expenseDescription.trim() || expenseCategory,
+      isImpulse: expenseIsImpulse,
+      createdAt: new Date().toISOString(),
+    });
+    setExpenseAmt("");
+    setExpenseDescription("");
+    onClose();
+  };
 
   const handleCreateTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -198,6 +234,8 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
 
   const tabs = [
     { key: "task", label: "Task", icon: CheckSquare },
+    { key: "water", label: "Hydration", icon: Droplets },
+    { key: "expense", label: "Expense", icon: Wallet },
     { key: "project", label: "Project", icon: FolderKanban },
     { key: "goal", label: "Goal", icon: Target },
     { key: "mood", label: "Mood & Energy", icon: Smile },
@@ -280,6 +318,139 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({
           <div className="flex justify-end pt-2">
             <Button type="submit" variant="primary" size="md">
               Create Task
+            </Button>
+          </div>
+        </form>
+      )}
+
+      {/* Hydration / Water Form */}
+      {activeTab === "water" && (
+        <form onSubmit={handleLogWater} className="space-y-4">
+          <div className="p-3 rounded-xl bg-cyan-50 border border-cyan-200 text-xs text-cyan-900 flex items-center gap-2">
+            <Droplets size={16} className="text-cyan-600 shrink-0" />
+            <span>Optimal hydration drives oxygen delivery to brain cells for peak alertness.</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-2">
+              Select or Custom Amount (ml)
+            </label>
+            <div className="grid grid-cols-3 gap-2 mb-3">
+              {[250, 500, 750].map((amt) => (
+                <button
+                  key={amt}
+                  type="button"
+                  onClick={() => setWaterMl(amt)}
+                  className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
+                    waterMl === amt
+                      ? "bg-cyan-50 text-cyan-700 border-cyan-300 shadow-xs"
+                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                  }`}
+                >
+                  +{amt} ml
+                </button>
+              ))}
+            </div>
+
+            <div className="relative">
+              <input
+                type="number"
+                min={50}
+                max={2000}
+                step={50}
+                value={waterMl}
+                onChange={(e) => setWaterMl(Number(e.target.value))}
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-xs font-mono font-bold"
+              />
+              <span className="absolute right-3.5 top-2.5 text-xs text-slate-400 font-semibold">ml</span>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-2">
+            <Button type="submit" variant="primary" size="md" className="bg-cyan-600 hover:bg-cyan-700 text-white">
+              Log Water ({waterMl} ml)
+            </Button>
+          </div>
+        </form>
+      )}
+
+      {/* Expense Form */}
+      {activeTab === "expense" && (
+        <form onSubmit={handleLogExpense} className="space-y-4">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-4">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Amount ($)
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-2 text-xs font-bold text-slate-400 font-mono">$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  placeholder="0.00"
+                  value={expenseAmt}
+                  onChange={(e) => setExpenseAmt(e.target.value)}
+                  className="w-full pl-7 pr-2 py-2 text-xs font-mono font-bold rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
+                />
+              </div>
+            </div>
+
+            <div className="col-span-8">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Category
+              </label>
+              <select
+                value={expenseCategory}
+                onChange={(e) => setExpenseCategory(e.target.value as ExpenseCategory)}
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs font-medium"
+              >
+                {[
+                  "Food & Dining",
+                  "Transport & Fuel",
+                  "Tools & Software",
+                  "Health & Fitness",
+                  "Books & Learning",
+                  "Entertainment",
+                  "General & Living",
+                ].map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              Description / Store
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Groceries or Server Hosting"
+              value={expenseDescription}
+              onChange={(e) => setExpenseDescription(e.target.value)}
+              className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
+            />
+          </div>
+
+          <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer select-none bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <input
+              type="checkbox"
+              checked={expenseIsImpulse}
+              onChange={(e) => setExpenseIsImpulse(e.target.checked)}
+              className="rounded text-amber-500 focus:ring-amber-400 h-3.5 w-3.5"
+            />
+            <div>
+              <span className="font-semibold block text-slate-900">Flag as Impulse Purchase</span>
+              <span className="text-[11px] text-slate-500">Helps track whether purchases were planned or driven by sudden urges.</span>
+            </div>
+          </label>
+
+          <div className="flex justify-end pt-2">
+            <Button type="submit" variant="primary" size="md" className="bg-amber-600 hover:bg-amber-700 text-white">
+              Record Expense
             </Button>
           </div>
         </form>

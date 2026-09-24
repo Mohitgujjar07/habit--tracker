@@ -17,6 +17,7 @@ import { DataStoreRepository } from "@/repositories/dataStore";
 import { NextActionEngine } from "@/lib/engines/nextActionEngine";
 import { PatternEngine, DetectedPattern } from "@/lib/engines/patternEngine";
 import { SlumpEngine } from "@/lib/engines/slumpEngine";
+import { PersonalTrackingHub } from "@/components/lifestyle/PersonalTrackingHub";
 import {
   UserProfile,
   Task,
@@ -202,6 +203,9 @@ function DashboardContent() {
             onPostponeReason={handlePostponeReason}
           />
         )}
+
+        {/* PERSONAL TRACKING & HABIT HUB */}
+        <PersonalTrackingHub />
 
         {/* Today's Mission & Project Momentum in 2 Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

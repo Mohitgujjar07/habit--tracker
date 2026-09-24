@@ -18,6 +18,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { QuickActionModal } from "@/components/layout/QuickActionModal";
+import { PersonalTrackingHub } from "@/components/lifestyle/PersonalTrackingHub";
 
 export const BodyView: React.FC = () => {
   const [sleepLogs, setSleepLogs] = useState<SleepLog[]>([]);
@@ -128,6 +129,9 @@ export const BodyView: React.FC = () => {
           <span className="text-[10px] text-surface-400">Movement anchor</span>
         </Card>
       </div>
+
+      {/* Interactive Personal Tracking & Vitality Hub */}
+      <PersonalTrackingHub />
 
       {/* Sleep Logs & Workouts in 2 columns */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

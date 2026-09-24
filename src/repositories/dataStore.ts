@@ -21,6 +21,11 @@ import {
   WeeklyReview,
   UrgeSurfingLog,
   DailyCheckin,
+  WaterLog,
+  ExpenseLog,
+  ImpulseHoldingItem,
+  DailyStreakMetric,
+  KnowledgeLog,
 } from "@/types";
 
 import {
@@ -66,6 +71,11 @@ const STORAGE_KEYS = {
   WEEKLY_REVIEWS: "ptos_weekly_reviews",
   URGE_LOGS: "ptos_urge_logs",
   DAILY_CHECKINS: "ptos_daily_checkins",
+  WATER_LOGS: "ptos_water_logs",
+  EXPENSE_LOGS: "ptos_expense_logs",
+  IMPULSE_ITEMS: "ptos_impulse_items",
+  DAILY_STREAKS: "ptos_daily_streaks",
+  KNOWLEDGE_LOGS: "ptos_knowledge_logs",
   HAS_SEEDED: "ptos_has_seeded_v1",
 };
 
@@ -553,8 +563,131 @@ export class DataStoreRepository {
       timeline: DataStoreRepository.getTimelineEvents(),
       urgeLogs: DataStoreRepository.getUrgeLogs(),
       dailyCheckins: DataStoreRepository.getDailyCheckins(),
+      waterLogs: DataStoreRepository.getWaterLogs(),
+      expenseLogs: DataStoreRepository.getExpenseLogs(),
+      impulseItems: DataStoreRepository.getImpulseHoldingItems(),
+      dailyStreaks: DataStoreRepository.getDailyStreaks(),
+      knowledgeLogs: DataStoreRepository.getKnowledgeLogs(),
       exportedAt: new Date().toISOString(),
     };
+  }
+
+  // --- WATER INTAKE & HYDRATION ---
+  static getWaterLogs(): WaterLog[] {
+    DataStoreRepository.ensureInitialized();
+    return readStorage<WaterLog[]>(STORAGE_KEYS.WATER_LOGS, []);
+  }
+
+  static getTodayWaterMl(): number {
+    const today = new Date().toISOString().split("T")[0];
+    return DataStoreRepository.getWaterLogs()
+      .filter((l) => l.date === today)
+      .reduce((sum, l) => sum + l.amountMl, 0);
+  }
+
+  static addWater(amountMl: number, targetMl = 3000): void {
+    const today = new Date().toISOString().split("T")[0];
+    const logs = DataStoreRepository.getWaterLogs();
+    logs.unshift({
+      id: `water-${Date.now()}`,
+      userId: "user-demo-1",
+      date: today,
+      amountMl,
+      targetMl,
+      createdAt: new Date().toISOString(),
+    });
+    writeStorage(STORAGE_KEYS.WATER_LOGS, logs);
+    DataStoreRepository.recordStreakAction("hydration");
+  }
+
+  // --- EXPENSES & FINANCIAL TRACKING ---
+  static getExpenseLogs(): ExpenseLog[] {
+    DataStoreRepository.ensureInitialized();
+    return readStorage<ExpenseLog[]>(STORAGE_KEYS.EXPENSE_LOGS, []);
+  }
+
+  static saveExpenseLog(log: ExpenseLog): void {
+    const logs = DataStoreRepository.getExpenseLogs();
+    log.id = log.id || `exp-${Date.now()}`;
+    log.createdAt = log.createdAt || new Date().toISOString();
+    logs.unshift(log);
+    writeStorage(STORAGE_KEYS.EXPENSE_LOGS, logs);
+  }
+
+  static getTodayExpenseTotal(): number {
+    const today = new Date().toISOString().split("T")[0];
+    return DataStoreRepository.getExpenseLogs()
+      .filter((e) => e.date === today)
+      .reduce((sum, e) => sum + e.amount, 0);
+  }
+
+  // --- IMPULSE COOLING-OFF VAULT ---
+  static getImpulseHoldingItems(): ImpulseHoldingItem[] {
+    DataStoreRepository.ensureInitialized();
+    return readStorage<ImpulseHoldingItem[]>(STORAGE_KEYS.IMPULSE_ITEMS, []);
+  }
+
+  static saveImpulseHoldingItem(item: ImpulseHoldingItem): void {
+    const items = DataStoreRepository.getImpulseHoldingItems();
+    const idx = items.findIndex((i) => i.id === item.id);
+    if (idx >= 0) {
+      items[idx] = item;
+    } else {
+      items.unshift(item);
+    }
+    writeStorage(STORAGE_KEYS.IMPULSE_ITEMS, items);
+  }
+
+  // --- DAILY STREAKS WITH GRACE-DAY BUFFER ---
+  static getDailyStreaks(): DailyStreakMetric[] {
+    DataStoreRepository.ensureInitialized();
+    const defaultStreaks: DailyStreakMetric[] = [
+      { id: "str-1", userId: "user-demo-1", name: "Hydration (2.5L+)", category: "hydration", currentStreak: 6, longestStreak: 14, lastLoggedDate: new Date().toISOString().split("T")[0], graceDayActive: false },
+      { id: "str-2", userId: "user-demo-1", name: "Physical Movement", category: "workout", currentStreak: 4, longestStreak: 12, lastLoggedDate: new Date().toISOString().split("T")[0], graceDayActive: false },
+      { id: "str-3", userId: "user-demo-1", name: "Morning Deep Work", category: "deep_work", currentStreak: 8, longestStreak: 21, lastLoggedDate: new Date().toISOString().split("T")[0], graceDayActive: false },
+      { id: "str-4", userId: "user-demo-1", name: "No-Spend Discipline", category: "no_spend", currentStreak: 3, longestStreak: 7, lastLoggedDate: new Date().toISOString().split("T")[0], graceDayActive: true },
+      { id: "str-5", userId: "user-demo-1", name: "Screen-Free Morning", category: "screen_free", currentStreak: 5, longestStreak: 10, lastLoggedDate: new Date().toISOString().split("T")[0], graceDayActive: false },
+    ];
+    return readStorage<DailyStreakMetric[]>(STORAGE_KEYS.DAILY_STREAKS, defaultStreaks);
+  }
+
+  static recordStreakAction(category: "hydration" | "workout" | "deep_work" | "no_spend" | "screen_free" | "reading"): void {
+    const streaks = DataStoreRepository.getDailyStreaks();
+    const today = new Date().toISOString().split("T")[0];
+    const streak = streaks.find((s) => s.category === category);
+    if (!streak) return;
+
+    if (streak.lastLoggedDate !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+      if (streak.lastLoggedDate === yesterday) {
+        streak.currentStreak += 1;
+        streak.graceDayActive = false;
+      } else if (!streak.graceDayActive) {
+        // Grace Day buffer (Never Miss Twice principle)
+        streak.graceDayActive = true;
+        streak.currentStreak += 1;
+      } else {
+        streak.currentStreak = 1;
+        streak.graceDayActive = false;
+      }
+      streak.longestStreak = Math.max(streak.longestStreak, streak.currentStreak);
+      streak.lastLoggedDate = today;
+      writeStorage(STORAGE_KEYS.DAILY_STREAKS, streaks);
+    }
+  }
+
+  // --- KNOWLEDGE & READING LOGS ---
+  static getKnowledgeLogs(): KnowledgeLog[] {
+    DataStoreRepository.ensureInitialized();
+    return readStorage<KnowledgeLog[]>(STORAGE_KEYS.KNOWLEDGE_LOGS, []);
+  }
+
+  static saveKnowledgeLog(log: KnowledgeLog): void {
+    const logs = DataStoreRepository.getKnowledgeLogs();
+    log.id = log.id || `kn-${Date.now()}`;
+    log.createdAt = log.createdAt || new Date().toISOString();
+    logs.unshift(log);
+    writeStorage(STORAGE_KEYS.KNOWLEDGE_LOGS, logs);
   }
 }
 

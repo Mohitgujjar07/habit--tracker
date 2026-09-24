@@ -26,6 +26,11 @@ const SYNC_COLLECTIONS = [
   "ptos_weekly_reviews",
   "ptos_urge_logs",
   "ptos_daily_checkins",
+  "ptos_water_logs",
+  "ptos_expense_logs",
+  "ptos_impulse_items",
+  "ptos_daily_streaks",
+  "ptos_knowledge_logs",
 ];
 
 export class CloudSyncService {

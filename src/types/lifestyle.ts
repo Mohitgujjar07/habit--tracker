@@ -125,3 +125,68 @@ export interface UrgeSurfingLog {
   notes?: string;
   createdAt: string;
 }
+
+export interface WaterLog {
+  id: string;
+  userId: string;
+  date: string; // YYYY-MM-DD
+  amountMl: number;
+  targetMl: number;
+  createdAt: string;
+}
+
+export type ExpenseCategory =
+  | "Food & Dining"
+  | "Transport & Fuel"
+  | "Tools & Software"
+  | "Health & Fitness"
+  | "Books & Learning"
+  | "Entertainment"
+  | "General & Living";
+
+export interface ExpenseLog {
+  id: string;
+  userId: string;
+  date: string; // YYYY-MM-DD
+  amount: number;
+  category: ExpenseCategory;
+  description: string;
+  isImpulse: boolean;
+  createdAt: string;
+}
+
+export interface ImpulseHoldingItem {
+  id: string;
+  userId: string;
+  itemName: string;
+  price: number;
+  category: ExpenseCategory;
+  url?: string;
+  notes?: string;
+  targetCooldownHours: number; // default 72h
+  createdAt: string;
+  status: "cooling" | "bought" | "resisted_saved";
+}
+
+export interface DailyStreakMetric {
+  id: string;
+  userId: string;
+  name: string;
+  category: "hydration" | "workout" | "deep_work" | "no_spend" | "screen_free" | "reading";
+  currentStreak: number;
+  longestStreak: number;
+  lastLoggedDate: string; // YYYY-MM-DD
+  graceDayActive: boolean; // Never miss twice buffer
+}
+
+export interface KnowledgeLog {
+  id: string;
+  userId: string;
+  date: string; // YYYY-MM-DD
+  title: string;
+  source: "Book" | "Article" | "Podcast" | "Experience";
+  oneSentenceTakeaway: string;
+  pagesRead?: number;
+  createdAt: string;
+}
+
